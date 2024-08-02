@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "658971406404",
+    "project_id": "adlamfulfulde-8a54a",
+    "storage_bucket": "adlamfulfulde-8a54a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658971406404:android:1bb62ea456241fecfd4c11",
+        "android_client_info": {
+          "package_name": "com.bekisma.adlamfulfulde"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjtXevTU9kuWqThwGFg-8GofA9haN-oto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

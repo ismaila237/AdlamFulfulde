@@ -1,0 +1,106 @@
+<resources>
+    <string name="app_name">Adlam</string>
+    <string name="menu">menu</string>
+
+    <!-- Screen titles -->
+    <string name="welcome_screen">Welcome screen</string>
+    <string name="exercise_sessions">Exercise sessions</string>
+    <string name="exercise_session_detail">Exercise session detail</string>
+    <string name="sleep_sessions">Sleep sessions</string>
+    <string name="sleep_session_detail">Sleep session detail</string>
+    <string name="differential_changes">Changes</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="input_readings">Record weight</string>
+
+
+    <string name="alphabet">Alphabet</string>
+    <string name="writing">Writing</string>
+    <string name="Exercises">Exercises</string>
+    <string name="alphabet_learning">Alphabet</string>
+    <string name="numbers">Numbers</string>
+    <string name="quiz">Quiz</string>
+    <string name="the_syllables">The syllables</string>
+    <string name="learn_to_write">Learn to write</string>
+    <string name="vocabulary">Vocabulary</string>
+    <string name="start">Start</string>
+    <string name="when_a_vowel_is_combined">"\n                When a vowel is combined with a consonant, \n                we get a syllable or “Sigande,” in Pular.\n                Let’s start by learning how syllables \n                are created. \n                After that, complete the missing \n                letters to create the syllables. \n                Then trace the letters again \n                to practice.\n            "</string>
+    <string name="th_adl_alp">"The Adlam alphabet consists of 28 letters. \n" +
+                        "There are five vowels called Mase and \n" +
+                        "23 consonants called Yhiye. \n" +
+                        "They play the same role in English as \n" +
+                        "in Pular."</string>
+    <string name="the_syllables_complete">THE SYLLABLES\nCOMPLETE and learn all adlam syllables</string>
+    <string name="complete_and_learn_all_adlam_syllables">\nCOMPLETE and learn all adlam syllables</string>
+    <string name="wrinting">Wrinting</string>
+    <string name="reading">Reading</string>
+    <string name="current_consonant">Consonant</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="consonne">Consonne: %1$s</string>
+    <string name="the_alphabet">THE ALPHABET</string>
+    <string name="trace_and_learn_all_adlam_letters">Trace and learn all adlam letters</string>
+    <string name="lower_case">Lower Case</string>
+    <string name="upper_case">Upper Case</string>
+    <string name="setting">Setting</string>
+    <string name="learn_alphabet">Learn Alphabet</string>
+    <string name="quiz_instructions_title">Quiz Instructions</string>
+    <string name="quiz_instructions_text">You will hear a sound representing an Adlam letter. Select the corresponding letter from the options provided.</string>
+    <string name="quiz_title">Quiz - Recognize the Letter</string>
+    <string name="quiz_completed">Quiz Completed!</string>
+    <string name="final_score">Final Score: %1$d/%2$d</string>
+    <string name="replay">Replay</string>
+    <string name="return_to_home">Return to Home</string>
+    <string name="score">Score: %1$d</string>
+    <string name="question">Question: %1$d</string>
+    <string name="play_sound">Play Sound</string>
+    <string name="correct">Correct!</string>
+    <string name="incorrect">Incorrect!</string>
+    <string name="backfffff">Back</string>
+
+    <string name="letter_details">Letter Details</string>
+    <string name="examples">Examples</string>
+    <string name="numbers_in_adlam">Numbers in Adlam</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="settings">Settings</string>
+    <string name="adlam_letter">Adlam Letter</string>
+    <string name="brush_settings_title">Brush Settings</string>
+    <string name="brush_size">Brush Size: %1$d px</string>
+    <string name="brush_color">Brush Color</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="info">Info</string>
+    <string name="reading_rules_title">Reading Rules</string>
+
+    <string name="select_difficulty">Select Difficulty</string>
+    <string name="beginner">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="advanced">Advanced</string>
+    <string name="best_score">Best score</string>
+    <string name="remaining_time">Remaining time</string>
+    <string name="reading_rules_text">
+        <![CDATA[
+        ADLaM Reading Rules:
+
+        1. ADLaM script is written from right to left.
+        2. The alphabet consists of 28 letters: 23 consonants and 5 vowels.
+        3. Primary syllable structures are CV and CVC.
+        4. Long vowels are indicated using diacritics.
+        5. Punctuation includes initial and final forms of question and exclamation marks.
+        6. Hyphens are used for word breaks; parentheses and double parentheses for grouping.
+        ]]>
+    </string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="save">Save</string>
+    <string name="share">Share</string>
+    <string name="confirm">Confirm</string>
+    <string name="clear">Clear</string>
+    <string name="brush_alpha">Brush Alpha</string>
+    <string name="ad_mob_test_banner_id">ca-app-pub-7309731358576813/8916934438</string>
+    <string name="ad_mob_banner_id">ca-app-pub-7309731358576813/8916934438</string>
+    <string name="ad_mob_interstitial_id">ca-app-pub-7309731358576813/1701354046</string>
+
+</resources>
