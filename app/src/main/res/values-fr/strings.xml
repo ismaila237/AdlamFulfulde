@@ -1,0 +1,126 @@
+<resources>
+    <!-- Nom de l'application -->
+    <string name="app_name">Adlam</string>
+
+    <!-- Menu -->
+    <string name="menu">Menu</string>
+
+    <!-- Titres des écrans -->
+    <string name="welcome_screen">Écran de bienvenue</string>
+    <string name="exercise_sessions">Sessions d\'exercice</string>
+    <string name="exercise_session_detail">Détails de la session d\'exercice</string>
+    <string name="sleep_sessions">Sessions de sommeil</string>
+    <string name="sleep_session_detail">Détails de la session de sommeil</string>
+    <string name="differential_changes">Changements différentiels</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="input_readings">Enregistrer le poids</string>
+
+    <!-- Modules d'apprentissage -->
+    <string name="alphabet">Alphabet</string>
+    <string name="alphabet_learning">Apprentissage de l\'alphabet</string>
+    <string name="numbers">Nombres</string>
+    <string name="quiz">Quiz</string>
+    <string name="the_syllables">Les syllabes</string>
+    <string name="learn_to_write">Apprendre à écrire</string>
+    <string name="vocabulary">Vocabulaire</string>
+    <string name="start">Commencer</string>
+
+    <string name="the_syllables_complete">Les syllabes complètes</string>
+    <string name="complete_and_learn_all_adlam_syllables">Complétez et apprenez toutes les syllabes Adlam</string>
+    <string name="writing">Écriture</string>
+    <string name="reading">Lecture</string>
+    <string name="current_consonant">Consonne actuelle</string>
+    <string name="previous">Précédent</string>
+    <string name="next">Suivant</string>
+    <string name="back">Retour</string>
+    <string name="consonne">Consonne : %1$s</string>
+    <string name="the_alphabet">L\'alphabet</string>
+    <string name="trace_and_learn_all_adlam_letters">Tracez et apprenez toutes les lettres Adlam</string>
+    <string name="lower_case">Minuscule</string>
+    <string name="upper_case">Majuscule</string>
+    <string name="setting">Paramètre</string>
+    <string name="learn_alphabet">Apprendre l\'alphabet</string>
+
+    <!-- Instructions du quiz -->
+    <string name="quiz_instructions_title">Instructions du quiz</string>
+    <string name="quiz_instructions_text">Vous entendrez un son représentant une lettre Adlam. Sélectionnez la lettre correspondante parmi les options proposées.</string>
+    <string name="quiz_title">Quiz - Reconnaître la lettre</string>
+    <string name="quiz_completed">Quiz terminé !</string>
+    <string name="final_score">Score final : %1$d/%2$d</string>
+    <string name="replay">Rejouer</string>
+    <string name="return_to_home">Retour à l\'accueil</string>
+    <string name="score">Score : %1$d</string>
+    <string name="question">Question : %1$d</string>
+    <string name="play_sound">Jouer le son</string>
+    <string name="correct">Correct !</string>
+    <string name="incorrect">Incorrect !</string>
+
+    <!-- Divers -->
+    <string name="letter_details">Détails de la lettre</string>
+    <string name="examples">Exemples</string>
+    <string name="numbers_in_adlam">Nombres en Adlam</string>
+    <string name="pause">Pause</string>
+    <string name="play">Lecture</string>
+    <string name="stop">Arrêter</string>
+    <string name="settings">Paramètres</string>
+    <string name="adlam_letter">Lettre Adlam</string>
+
+    <!-- Paramètres du pinceau -->
+    <string name="brush_settings_title">Paramètres du pinceau</string>
+    <string name="brush_size">Taille du pinceau : %1$d px</string>
+    <string name="brush_color">Couleur du pinceau</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
+    <string name="info">Info</string>
+
+    <!-- Règles de lecture -->
+    <string name="reading_rules_title">Règles de lecture</string>
+
+
+
+    <!-- Annuler, refaire et autres actions -->
+    <string name="undo">Annuler</string>
+    <string name="redo">Refaire</string>
+    <string name="save">Enregistrer</string>
+    <string name="share">Partager</string>
+    <string name="confirm">Confirmer</string>
+    <string name="clear">Effacer</string>
+    <string name="brush_alpha">Opacité du pinceau</string>
+
+    <!-- IDs AdMob -->
+    <string name="ad_mob_test_banner_id">ca-app-pub-7309731358576813/8916934438</string>
+    <string name="ad_mob_banner_id">ca-app-pub-7309731358576813/8916934438</string>
+    <string name="ad_mob_interstitial_id">ca-app-pub-7309731358576813/1701354046</string>
+
+    <!-- Divers titres et étiquettes -->
+    <string name="about">À propos</string>
+    <string name="adlam_by_microsoft">Adlam par Microsoft</string>
+    <string name="android_developers_guide">Guide des développeurs Android</string>
+    <string name="select_difficulty">Sélectionnez la difficulté</string>
+    <string name="beginner">Débutant</string>
+    <string name="intermediate">Intermédiaire</string>
+    <string name="advanced">Avancé</string>
+    <string name="best_score">Meilleur score</string>
+    <string name="remaining_time">Temps restant</string>
+<!--    haha-->
+    <string name="when_a_vowel_is_combined">"\n                When a vowel is combined with a consonant, \n                we get a syllable or “Sigande,” in Pular.\n                Let’s start by learning how syllables \n                are created. \n                After that, complete the missing \n                letters to create the syllables. \n                Then trace the letters again \n                to practice.\n            "</string>
+
+    <string name="th_adl_alp">"The Adlam alphabet consists of 28 letters. \n" +
+                        "There are five vowels called Mase and \n" +
+                        "23 consonants called Yhiye. \n" +
+                        "They play the same role in English as \n" +
+                        "in Pular."</string>
+    <string name="reading_rules_text">
+        <![CDATA[
+        ADLaM Reading Rules:
+
+        1. ADLaM script is written from right to left.
+        2. The alphabet consists of 28 letters: 23 consonants and 5 vowels.
+        3. Primary syllable structures are CV and CVC.
+        4. Long vowels are indicated using diacritics.
+        5. Punctuation includes initial and final forms of question and exclamation marks.
+        6. Hyphens are used for word breaks; parentheses and double parentheses for grouping.
+        ]]>
+    </string>
+
+</resources>

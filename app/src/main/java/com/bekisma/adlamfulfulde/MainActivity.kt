@@ -1,10 +1,12 @@
-// package com.bekisma.adlamfulfulde
-
 package com.bekisma.adlamfulfulde
 
+import android.content.Intent
+import android.net.Uri
 import SyllablesReadingScreen
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateDpAsState
@@ -39,7 +41,10 @@ import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme
 import kotlinx.coroutines.launch
 import com.google.android.gms.ads.MobileAds
 
-class MainActivity : ComponentActivity() {
+class MainActivity() : ComponentActivity(), Parcelable {
+    constructor(parcel: Parcel) : this() {
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MobileAds.initialize(this)
@@ -63,13 +68,14 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("numbers") { NumbersScreen(navController) }
-                    composable("writingUpperCase") { WritingUpperCaseScreen(navController) } // Correct spelling
+                    composable("writingUpperCase") { WritingUpperCaseScreen(navController) }
                     composable("writingNumber") { WritingNumberScreen(navController) }
                     composable("writingLowerCase") { WritingLowerCaseScreen(navController) }
                     composable("writing") { WritingScreen(navController) }
                     composable("syllables") { SyllablesScreen(navController) }
                     composable("quiz") { QuizScreen(navController) }
                     composable("syllables_reading") { SyllablesReadingScreen(navController) }
+                    composable("about") { AboutScreen()
                 }
             }
         }
@@ -81,14 +87,35 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(navController: NavController) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text("Drawer title", modifier = Modifier.padding(16.dp))
+                Text("ADLAM", modifier = Modifier.padding(16.dp))
                 Divider()
-                // Ajoutez d'autres éléments de navigation ici si nécessaire
+                NavigationDrawerItem(
+                    label = { Text(stringResource(R.string.about)) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("about")
+                    },
+                    modifier = Modifier.padding(16.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text(stringResource(R.string.privacy_policys)) },
+                    selected = false,
+                    onClick = {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://myportfolio-b7209.web.app/privacy.html")
+                            )
+                        )
+                    },
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         }
     ) {
@@ -223,7 +250,25 @@ fun TopBar(drawerState: DrawerState, scope: kotlinx.coroutines.CoroutineScope) {
     )
 }
 
-@Preview(
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<MainActivity> {
+        override fun createFromParcel(parcel: Parcel): MainActivity {
+            return MainActivity(parcel)
+        }
+
+        override fun newArray(size: Int): Array<MainActivity?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+    @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     name = "DefaultPreviewDark"
 )
@@ -235,4 +280,5 @@ fun TopBar(drawerState: DrawerState, scope: kotlinx.coroutines.CoroutineScope) {
 fun WritingPreview() {
     val navController = rememberNavController()
     MainScreen(navController)
+}
 }

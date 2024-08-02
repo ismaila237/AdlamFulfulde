@@ -44,17 +44,19 @@ val adlamLetters = listOf(
     "𞤒" to R.raw.adlam19_1, "𞤓" to R.raw.adlam20_1, "𞤔" to R.raw.adlam21_1,
     "𞤕" to R.raw.adlam22_1, "𞤖" to R.raw.adlam23_1, "𞤗" to R.raw.adlam24_1,
     "𞤘" to R.raw.adlam25_1, "𞤙" to R.raw.adlam26_1, "𞤚" to R.raw.adlam27_1,
-    "𞤛" to R.raw.adlam28_1, "𞤜" to R.raw.ad0, "𞤝" to R.raw.ad1
+    "𞤛" to R.raw.adlam28_1, "𞤐𞤁" to R.raw.son_nul, "𞤐𞤄" to R.raw.son_nul,
+    "𞤐𞤶" to R.raw.son_nul, "𞤐𞤘" to R.raw.son_nul
 )
 
+
 val adlamToLatinMapQuiz = mapOf(
-    "𞤀" to "A", "𞤁" to "B", "𞤂" to "C", "𞤃" to "DA", "𞤄" to "E",
-    "𞤅" to "F", "𞤆" to "G", "𞤇" to "H", "𞤈" to "I", "𞤉" to "J",
-    "𞤊" to "K", "𞤋" to "L", "𞤌" to "M", "𞤍" to "N", "𞤎" to "O",
-    "𞤏" to "P", "𞤐" to "Q", "𞤑" to "R", "𞤒" to "S", "𞤓" to "T",
-    "𞤔" to "U", "𞤕" to "V", "𞤖" to "W", "𞤗" to "X", "𞤘" to "Y",
-    "𞤙" to "Z", "𞤚" to "SH", "𞤛" to "NG", "𞤜" to "NGA", "𞤝" to "NYA"
+    "𞤀" to "A", "𞤁" to "DA", "𞤂" to "LA", "𞤃" to "MA", "𞤄" to "BA", "𞤅" to "SA", "𞤆" to "PA",
+    "𞤇" to "ƁA", "𞤈" to "RA", "𞤉" to "E", "𞤊" to "FA", "𞤋" to "I", "𞤌" to "O", "𞤍" to "ƊA", "𞤎" to "ƳA",
+    "𞤏" to "WA", "𞤐" to "NA", "𞤑" to "KA", "𞤒" to "YA", "𞤓" to "U", "𞤔" to "JA", "𞤕" to "CA", "𞤖" to "HA",
+    "𞤗" to "QA", "𞤘" to "GA", "𞤙" to "ÑA", "𞤚" to "TA", "𞤛" to "NHA",
+    "𞤐𞤁" to "NDA", "𞤐𞤄" to "MBA", "𞤐𞤔" to "NJA", "𞤐𞤘" to "NGA"
 )
+
 
 val difficultyLevels = mapOf(
     15 to R.string.beginner,

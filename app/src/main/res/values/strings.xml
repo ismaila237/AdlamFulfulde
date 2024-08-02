@@ -102,5 +102,9 @@
     <string name="ad_mob_test_banner_id">ca-app-pub-7309731358576813/8916934438</string>
     <string name="ad_mob_banner_id">ca-app-pub-7309731358576813/8916934438</string>
     <string name="ad_mob_interstitial_id">ca-app-pub-7309731358576813/1701354046</string>
+    <string name="privacy_policys">Privacy Policy</string>
+    <string name="about">About</string>
+    <string name="adlam_by_microsoft">Adlam by Microsoft</string>
+    <string name="android_developers_guide">Android Developers Guide</string>
 
 </resources>

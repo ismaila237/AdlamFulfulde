@@ -1,0 +1,127 @@
+<resources>
+    <!-- اسم التطبيق -->
+    <string name="app_name">أدلام</string>
+
+    <!-- القائمة -->
+    <string name="menu">قائمة</string>
+
+    <!-- عناوين الشاشات -->
+    <string name="welcome_screen">شاشة الترحيب</string>
+    <string name="exercise_sessions">جلسات التمرين</string>
+    <string name="exercise_session_detail">تفاصيل جلسة التمرين</string>
+    <string name="sleep_sessions">جلسات النوم</string>
+    <string name="sleep_session_detail">تفاصيل جلسة النوم</string>
+    <string name="differential_changes">التغييرات التفاضلية</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="input_readings">تسجيل الوزن</string>
+
+    <!-- وحدات التعلم -->
+    <string name="alphabet">الأبجدية</string>
+    <string name="alphabet_learning">تعلم الأبجدية</string>
+    <string name="numbers">الأرقام</string>
+    <string name="quiz">اختبار</string>
+    <string name="the_syllables">المقاطع الصوتية</string>
+    <string name="learn_to_write">تعلم الكتابة</string>
+    <string name="vocabulary">المفردات</string>
+    <string name="start">ابدأ</string>
+    <string name="when_a_vowel_is_combined">
+        عندما يتم دمج حرف متحرك مع حرف ساكن،
+        نحصل على مقطع صوتي أو "سيغاندي" بلغة البُلاري.
+        لنبدأ بتعلم كيفية إنشاء المقاطع الصوتية.
+        بعد ذلك، أكمل الحروف الناقصة لإنشاء المقاطع الصوتية.
+        ثم تتبع الحروف مرة أخرى للتمرين.
+    </string>
+    <string name="th_adl_alp">
+        تتكون الأبجدية أدلام من 28 حرفاً.
+        هناك خمس حروف متحركة تُسمى "ماس" و
+        23 حرف ساكن تُسمى "يهيا".
+        تلعب نفس الدور في الإنجليزية كما هو الحال في البُلاري.
+    </string>
+    <string name="the_syllables_complete">إكمال المقاطع الصوتية</string>
+    <string name="complete_and_learn_all_adlam_syllables">أكمل وتعلم جميع المقاطع الصوتية لأدلام</string>
+    <string name="writing">الكتابة</string>
+    <string name="reading">القراءة</string>
+    <string name="current_consonant">الحرف الساكن الحالي</string>
+    <string name="previous">السابق</string>
+    <string name="next">التالي</string>
+    <string name="back">رجوع</string>
+    <string name="consonne">الحرف الساكن: %1$s</string>
+    <string name="the_alphabet">الأبجدية</string>
+    <string name="trace_and_learn_all_adlam_letters">تتبع وتعلم جميع حروف أدلام</string>
+    <string name="lower_case">أحرف صغيرة</string>
+    <string name="upper_case">أحرف كبيرة</string>
+    <string name="setting">الإعدادات</string>
+    <string name="learn_alphabet">تعلم الأبجدية</string>
+
+    <!-- تعليمات الاختبار -->
+    <string name="quiz_instructions_title">تعليمات الاختبار</string>
+    <string name="quiz_instructions_text">سوف تسمع صوتًا يمثل حرفًا من حروف أدلام. حدد الحرف المقابل من الخيارات المتاحة.</string>
+    <string name="quiz_title">اختبار - التعرف على الحرف</string>
+    <string name="quiz_completed">الاختبار مكتمل!</string>
+    <string name="final_score">النتيجة النهائية: %1$d/%2$d</string>
+    <string name="replay">إعادة</string>
+    <string name="return_to_home">العودة إلى الرئيسية</string>
+    <string name="score">النتيجة: %1$d</string>
+    <string name="question">السؤال: %1$d</string>
+    <string name="play_sound">تشغيل الصوت</string>
+    <string name="correct">صحيح!</string>
+    <string name="incorrect">خاطئ!</string>
+
+    <!-- متنوعة -->
+    <string name="letter_details">تفاصيل الحرف</string>
+    <string name="examples">أمثلة</string>
+    <string name="numbers_in_adlam">الأرقام في أدلام</string>
+    <string name="pause">إيقاف مؤقت</string>
+    <string name="play">تشغيل</string>
+    <string name="stop">إيقاف</string>
+    <string name="settings">الإعدادات</string>
+    <string name="adlam_letter">حرف أدلام</string>
+
+    <!-- إعدادات الفرشاة -->
+    <string name="brush_settings_title">إعدادات الفرشاة</string>
+    <string name="brush_size">حجم الفرشاة: %1$d px</string>
+    <string name="brush_color">لون الفرشاة</string>
+    <string name="ok">موافق</string>
+    <string name="cancel">إلغاء</string>
+    <string name="info">معلومات</string>
+
+    <!-- قواعد القراءة -->
+    <string name="reading_rules_title">قواعد القراءة</string>
+    <string name="reading_rules_text">
+        <![CDATA[
+        قواعد القراءة لأدلام:
+
+        1. يُكتب نظام أدلام من اليمين إلى اليسار.
+        2. تتكون الأبجدية من 28 حرفًا: 23 ساكنًا و5 متحركة.
+        3. الهياكل المقطعية الأساسية هي CV وCVC.
+        4. تُشير العلامات الطويلة إلى الحروف المتحركة الطويلة.
+        5. تتضمن علامات الترقيم أشكال البداية والنهاية لعلامات الاستفهام والتعجب.
+        6. تُستخدم الواصلات لفواصل الكلمات؛ الأقواس والأقواس المزدوجة للتجميع.
+        ]]>
+    </string>
+
+    <!-- التراجع، إعادة، وأفعال أخرى -->
+    <string name="undo">تراجع</string>
+    <string name="redo">إعادة</string>
+    <string name="save">حفظ</string>
+    <string name="share">مشاركة</string>
+    <string name="confirm">تأكيد</string>
+    <string name="clear">مسح</string>
+    <string name="brush_alpha">شفافية الفرشاة</string>
+
+    <!-- معرفات AdMob -->
+    <string name="ad_mob_test_banner_id">ca-app-pub-7309731358576813/8916934438</string>
+    <string name="ad_mob_banner_id">ca-app-pub-7309731358576813/8916934438</string>
+    <string name="ad_mob_interstitial_id">ca-app-pub-7309731358576813/1701354046</string>
+
+    <!-- عناوين وعلامات متنوعة -->
+    <string name="about">حول</string>
+    <string name="adlam_by_microsoft">أدلام بواسطة مايكروسوفت</string>
+    <string name="android_developers_guide">دليل مطوري أندرويد</string>
+    <string name="select_difficulty">اختر الصعوبة</string>
+    <string name="beginner">مبتدئ</string>
+    <string name="intermediate">متوسط</string>
+    <string name="advanced">متقدم</string>
+    <string name="best_score">أفضل نتيجة</string>
+    <string name="remaining_time">الوقت المتبقي</string>
+</resources>
