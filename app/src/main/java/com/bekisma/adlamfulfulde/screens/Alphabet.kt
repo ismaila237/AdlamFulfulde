@@ -56,7 +56,7 @@ fun AlphabetScreen(navController: NavController) {
                         Divider()
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(4),
-                            contentPadding = PaddingValues(8.dp),
+                            contentPadding = PaddingValues(4.dp),
                             content = {
                                 items(alphabetList) { letter ->
                                     AlphabetItemCard(letter, navController = navController)

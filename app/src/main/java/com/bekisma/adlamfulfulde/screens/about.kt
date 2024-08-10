@@ -21,12 +21,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.bekisma.adlamfulfulde.R
 import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen() {
+fun AboutScreen(navController: NavController) {
     val context = LocalContext.current
 
     Scaffold(
@@ -34,7 +35,7 @@ fun AboutScreen() {
             TopAppBar(
                 title = { Text(stringResource(R.string.about)) },
                 navigationIcon = {
-                    IconButton(onClick = { /* TODO: Handle back navigation */ }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
@@ -45,7 +46,6 @@ fun AboutScreen() {
             )
         }
     ) { paddingValues ->
-        // Main content of the screen
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -54,14 +54,14 @@ fun AboutScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Contributors",
+                text = stringResource(R.string.contributors),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = Modifier.padding(vertical = 8.dp)
             )
-            listOf("Aysha Sow").forEach { name ->
+            listOf("AYSHA SOW", "ABOUBAKAR BALLO", "ISMAILA HAMADOU").forEach { name ->
                 Text(
                     text = name,
                     style = MaterialTheme.typography.bodyLarge,
@@ -140,7 +140,8 @@ fun ReferenceLink(title: String, url: String, icon: Painter, onClick: () -> Unit
 @Composable
 fun AboutScreenLightPreview() {
     AdlamFulfuldeTheme(useDarkTheme = false) {
-        AboutScreen()
+        // Provide a dummy NavController for the preview
+        AboutScreen(navController = NavController(LocalContext.current))
     }
 }
 
@@ -152,6 +153,7 @@ fun AboutScreenLightPreview() {
 @Composable
 fun AboutScreenDarkPreview() {
     AdlamFulfuldeTheme(useDarkTheme = true) {
-        AboutScreen()
+        // Provide a dummy NavController for the preview
+        AboutScreen(navController = NavController(LocalContext.current))
     }
 }

@@ -12,8 +12,8 @@ android {
         applicationId = "com.bekisma.adlamfulfulde"
         minSdk = 24
         targetSdk = 34
-        versionCode = 24
-        versionName = "24.2.8"
+        versionCode = 30
+        versionName = "30.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

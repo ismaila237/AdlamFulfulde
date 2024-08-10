@@ -109,11 +109,11 @@ fun WritingNumberScreen(navController: NavController) {
                     IconButton(onClick = { paths.clear() }) {
                         Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear))
                     }
-                    IconButton(onClick = {
-                        saveDrawingToGallery(context, adlamNumerals[currentIndex])
-                    }) {
-                        Icon(painterResource(id = R.drawable.save_alt), contentDescription = stringResource(R.string.save))
-                    }
+//                    IconButton(onClick = {
+//                        saveDrawingToGallery(context, adlamNumerals[currentIndex])
+//                    }) {
+//                        Icon(painterResource(id = R.drawable.save_alt), contentDescription = stringResource(R.string.save))
+//                    }
                 }
             }
         }

@@ -47,7 +47,6 @@ fun WritingLowerCaseScreen(navController: NavController) {
         "𞤩", "𞤪", "𞤫", "𞤬", "𞤭", "𞤮", "𞤯", "𞤰",
         "𞤱", "𞤲", "𞤳", "𞤴", "𞤵", "𞤶", "𞤷",
         "𞤸", "𞤹", "𞤺", "𞤻", "𞤼",
-        "𞤲𞤣", "𞤲𞤦", "𞤲𞤶", "𞤲𞤺", "𞤲𞤢"
     )
     var currentIndex by remember { mutableStateOf(0) }
     val paintColor = remember { mutableStateOf(Color.Black) }
@@ -112,11 +111,11 @@ fun WritingLowerCaseScreen(navController: NavController) {
                     IconButton(onClick = { paths.clear() }) {
                         Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear))
                     }
-                    IconButton(onClick = {
-                        saveDrawingToGallery(context, adlamAlphabetLowerCase[currentIndex])
-                    }) {
-                        Icon(painterResource(id = R.drawable.save_alt), contentDescription = stringResource(R.string.save))
-                    }
+//                    IconButton(onClick = {
+//                        saveDrawingToGallery(context, adlamAlphabetLowerCase[currentIndex])
+//                    }) {
+//                        Icon(painterResource(id = R.drawable.save_alt), contentDescription = stringResource(R.string.save))
+//                    }
                 }
             }
         }

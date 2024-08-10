@@ -124,4 +124,6 @@
     <string name="advanced">متقدم</string>
     <string name="best_score">أفضل نتيجة</string>
     <string name="remaining_time">الوقت المتبقي</string>
+    <string name="contributors">المساهمون</string>
+
 </resources>

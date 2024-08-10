@@ -44,9 +44,8 @@ fun WritingUpperCaseScreen(navController: NavController) {
     val adlamAlphabet = listOf(
         "𞤀", "𞤁", "𞤂", "𞤃", "𞤄", "𞤅", "𞤆",
         "𞤇", "𞤈", "𞤉", "𞤊", "𞤋", "𞤌", "𞤍", "𞤎",
-        "𞤏", "𞤑", "𞤒", "𞤓", "𞤔", "𞤕", "𞤖",
+        "𞤏", "𞤐", "𞤑", "𞤒", "𞤓", "𞤔", "𞤕", "𞤖",
         "𞤗", "𞤘", "𞤙", "𞤚", "𞤛",
-        "𞤐𞤁", "𞤐𞤄", "𞤐𞤔", "𞤐𞤘", "𞤢"
     )
     var currentIndex by remember { mutableStateOf(0) }
     val paintColor = remember { mutableStateOf(Color.Black) }
@@ -107,11 +106,11 @@ fun WritingUpperCaseScreen(navController: NavController) {
                     IconButton(onClick = { paths.clear() }) {
                         Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear))
                     }
-                    IconButton(onClick = {
-                        saveDrawingToGallery(context, adlamAlphabet[currentIndex])
-                    }) {
-                        Icon(painterResource(id = R.drawable.save_alt), contentDescription = stringResource(R.string.save))
-                    }
+//                    IconButton(onClick = {
+//                        saveDrawingToGallery(context, adlamAlphabet[currentIndex])
+//                    }) {
+//                        Icon(painterResource(id = R.drawable.save_alt), contentDescription = stringResource(R.string.save))
+//                    }
                 }
             }
         }

@@ -75,7 +75,7 @@ class MainActivity() : ComponentActivity(), Parcelable {
                     composable("syllables") { SyllablesScreen(navController) }
                     composable("quiz") { QuizScreen(navController) }
                     composable("syllables_reading") { SyllablesReadingScreen(navController) }
-                    composable("about") { AboutScreen()
+                    composable("about") { AboutScreen(navController)
                 }
             }
         }
@@ -100,6 +100,7 @@ fun MainScreen(navController: NavController) {
                     selected = false,
                     onClick = {
                         navController.navigate("about")
+
                     },
                     modifier = Modifier.padding(16.dp)
                 )
@@ -110,7 +111,7 @@ fun MainScreen(navController: NavController) {
                         context.startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://myportfolio-b7209.web.app/privacy.html")
+                                Uri.parse("https://adlamfulfulde-8a54a.web.app/privacy/privacy.html")
                             )
                         )
                     },
