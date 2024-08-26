@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="show_adlam">Show Adlam</string>
+    <string name="show_latin">Show Latin</string>
+    <string name="hide_guide">Hide guide</string>
+    <string name="show_guide">Show guide</string>
+    <string name="writing_uppercase">Writing uppercase</string>
+    <string name="show_hint">Show hint</string>
+    <string name="play_again">Play again</string>
+    <string name="share_app">Share app</string>
+</resources>

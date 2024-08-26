@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,14 +30,21 @@ fun WritingScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.app_name)) },
+                title = {
+                    Text(
+                        stringResource(R.string.learn_to_write),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
         }
@@ -42,66 +52,102 @@ fun WritingScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            BannerAdView() // Ajoutez la bannière ici
-            Spacer(modifier = Modifier.height(16.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                BannerAdView()
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text = stringResource(R.string.the_alphabet),
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = stringResource(R.string.trace_and_learn_all_adlam_letters),
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-            Text(
-                text = stringResource(R.string.th_adl_alp).trimIndent(),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 32.dp)
-            )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.the_alphabet),
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        Text(
+                            text = stringResource(R.string.trace_and_learn_all_adlam_letters),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        Text(
+                            text = stringResource(R.string.th_adl_alp).trimIndent(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
 
-            ActionButton(
-                navController = navController,
-                route = "writingUpperCase",
-                text = stringResource(R.string.upper_case)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ActionButton(
-                navController = navController,
-                route = "writingLowerCase",
-                text = stringResource(R.string.lower_case)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ActionButton(
-                navController = navController,
-                route = "writingNumber",
-                text = stringResource(R.string.numbers)
-            )
+            Column(
+                modifier = Modifier.padding(vertical = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                ActionButton(
+                    navController = navController,
+                    route = "writingUpperCase",
+                    text = stringResource(R.string.upper_case),
+                    icon = Icons.Default.Create
+                )
+                ActionButton(
+                    navController = navController,
+                    route = "writingLowerCase",
+                    text = stringResource(R.string.lower_case),
+                    icon = Icons.Default.Edit
+                )
+                ActionButton(
+                    navController = navController,
+                    route = "writingNumber",
+                    text = stringResource(R.string.numbers),
+                    icon = Icons.Default.ArrowBack
+                )
+            }
         }
     }
 }
 
 @Composable
-fun ActionButton(navController: NavController, route: String, text: String) {
+fun ActionButton(navController: NavController, route: String, text: String, icon: ImageVector) {
     Button(
         onClick = { navController.navigate(route) },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp),
-        shape = RoundedCornerShape(50)
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            fontSize = 30.sp
+            .height(60.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Icon(icon, contentDescription = null)
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
     }
 }
 
@@ -118,4 +164,3 @@ fun WritingPreview() {
     val navController = rememberNavController()
     WritingScreen(navController)
 }
-

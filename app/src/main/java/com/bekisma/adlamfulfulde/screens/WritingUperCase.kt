@@ -49,68 +49,83 @@ fun WritingUpperCaseScreen(navController: NavController) {
     )
     var currentIndex by remember { mutableStateOf(0) }
     val paintColor = remember { mutableStateOf(Color.Black) }
-    val brushSize = remember { mutableStateOf(20f) } // Default brush size set to 20
+    val brushSize = remember { mutableStateOf(20f) }
     val brushAlpha = remember { mutableStateOf(1f) }
     val paths = remember { mutableStateListOf<Pair<Path, PaintAttributes>>() }
     val currentPath = remember { mutableStateOf(Path()) }
     var showBrushSettingsDialog by remember { mutableStateOf(false) }
+    var showStrokeGuide by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.app_name), fontWeight = FontWeight.Bold, fontSize = 20.sp) },
+                title = { Text(stringResource(R.string.writing_uppercase), fontWeight = FontWeight.Bold, fontSize = 20.sp) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                actions = {
+                    IconButton(onClick = { showStrokeGuide = showStrokeGuide }) {
+                        Icon(
+                            painter = painterResource(
+                                id = if (showStrokeGuide) R.drawable.ic_visibility_off else R.drawable.ic_visibility
+                            ),
+                            contentDescription = stringResource(
+                                if (showStrokeGuide) R.string.hide_guide else R.string.show_guide
+                            )
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
         },
         bottomBar = {
             BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = {
-                        if (currentIndex > 0) {
-                            currentIndex--
-                            paths.clear() // Clear paths on previous
-                        }
-                    }) {
+                    IconButton(
+                        onClick = {
+                            if (currentIndex > 0) {
+                                currentIndex--
+                                paths.clear()
+                            }
+                        },
+                        enabled = currentIndex > 0
+                    ) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.previous))
                     }
                     IconButton(onClick = { showBrushSettingsDialog = true }) {
-                        Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings))
-                    }
-                    IconButton(onClick = {
-                        if (currentIndex < adlamAlphabet.size - 1) {
-                            currentIndex++
-                            paths.clear() // Clear paths on next
-                        }
-                    }) {
-                        Icon(Icons.Filled.ArrowForward, contentDescription = stringResource(R.string.next))
+                        Icon(Icons.Filled.PlayArrow, contentDescription = stringResource(R.string.brush_settings_title))
                     }
                     IconButton(onClick = { paths.clear() }) {
                         Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear))
                     }
-//                    IconButton(onClick = {
-//                        saveDrawingToGallery(context, adlamAlphabet[currentIndex])
-//                    }) {
-//                        Icon(painterResource(id = R.drawable.save_alt), contentDescription = stringResource(R.string.save))
-//                    }
+                    IconButton(
+                        onClick = {
+                            if (currentIndex < adlamAlphabet.size - 1) {
+                                currentIndex++
+                                paths.clear()
+                            }
+                        },
+                        enabled = currentIndex < adlamAlphabet.size - 1
+                    ) {
+                        Icon(Icons.Filled.ArrowForward, contentDescription = stringResource(R.string.next))
+                    }
                 }
             }
         }
@@ -120,23 +135,31 @@ fun WritingUpperCaseScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Display banner ad at the top of the content
             BannerAdView()
             Spacer(modifier = Modifier.height(16.dp))
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background) // Use theme for background
+                    .background(MaterialTheme.colorScheme.background)
             ) {
+                // Background letter
                 Text(
                     text = adlamAlphabet[currentIndex],
                     fontSize = 300.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
                     modifier = Modifier.align(Alignment.Center)
                 )
 
+                // Stroke guide
+                if (showStrokeGuide) {
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        drawStrokeGuide(adlamAlphabet[currentIndex])
+                    }
+                }
+
+                // Drawing canvas
                 Canvas(
                     modifier = Modifier
                         .fillMaxSize()
@@ -178,6 +201,24 @@ fun WritingUpperCaseScreen(navController: NavController) {
         }
     }
 }
+
+fun DrawScope.drawStrokeGuide(letter: String) {
+    // This is a simplified example. You would need to define actual stroke paths for each letter.
+    val path = Path().apply {
+        // Example stroke guide for "𞤀" (first letter of Adlam)
+        moveTo(size.width * 0.3f, size.height * 0.2f)
+        lineTo(size.width * 0.7f, size.height * 0.2f)
+        lineTo(size.width * 0.5f, size.height * 0.8f)
+    }
+
+    drawPath(
+        path = path,
+        color = Color.Red.copy(alpha = 0.5f),
+        style = Stroke(width = 10f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f)))
+    )
+}
+
+// ... (rest of the code remains the same)
 
 fun saveDrawingToGallery(context: Context, currentLetter: String) {
     val bitmap = Bitmap.createBitmap(1080, 1920, Bitmap.Config.ARGB_8888)

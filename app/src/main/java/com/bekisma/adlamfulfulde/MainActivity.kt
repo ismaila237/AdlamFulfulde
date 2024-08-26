@@ -9,6 +9,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,6 +42,7 @@ import com.bekisma.adlamfulfulde.screens.*
 import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme
 import kotlinx.coroutines.launch
 import com.google.android.gms.ads.MobileAds
+import kotlinx.coroutines.CoroutineScope
 
 class MainActivity() : ComponentActivity(), Parcelable {
     constructor(parcel: Parcel) : this() {
@@ -82,173 +85,219 @@ class MainActivity() : ComponentActivity(), Parcelable {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainScreen(navController: NavController) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun MainScreen(navController: NavController) {
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Text("ADLAM", modifier = Modifier.padding(16.dp))
-                Divider()
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.about)) },
-                    selected = false,
-                    onClick = {
-                        navController.navigate("about")
-
-                    },
-                    modifier = Modifier.padding(16.dp)
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.privacy_policys)) },
-                    selected = false,
-                    onClick = {
-                        context.startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://adlamfulfulde-8a54a.web.app/privacy/privacy.html")
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                ModalDrawerSheet {
+                    Text(
+                        "ADLAM",
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Divider()
+                    NavigationDrawerItem(
+                        label = { Text(stringResource(R.string.about)) },
+                        selected = false,
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                                navController.navigate("about")
+                            }
+                        },
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                    )
+                    NavigationDrawerItem(
+                        label = { Text(stringResource(R.string.privacy_policys)) },
+                        selected = false,
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                                context.startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://adlamfulfulde-8a54a.web.app/privacy/privacy.html")
+                                    )
+                                )
+                            }
+                        },
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                    )
+                    NavigationDrawerItem(
+                        label = { Text(stringResource(R.string.share_app)) },
+                        selected = false,
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, "Check out this amazing Adlam Fulfulde learning app: https://play.google.com/store/apps/details?id=com.bekisma.adlamfulfulde")
+                                    type = "text/plain"
+                                }
+                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                context.startActivity(shareIntent)
+                            }
+                        },
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = stringResource(R.string.share_app)
                             )
-                        )
-                    },
-                    modifier = Modifier.padding(16.dp)
+                        }
+                    )
+                }
+            }
+        ) {
+            Scaffold(
+                topBar = { TopBar(drawerState, scope) },
+                content = { paddingValues ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(16.dp)
+                    ) {
+                        item {
+                            BannerAdView()
+                        }
+                        item {
+                            MenuCard(
+                                image = painterResource(id = R.drawable.abc64),
+                                title = stringResource(id = R.string.alphabet_learning),
+                                onClick = { navController.navigate("alphabet") }
+                            )
+                        }
+                        item {
+                            MenuCard(
+                                image = painterResource(id = R.drawable.number),
+                                title = stringResource(id = R.string.numbers),
+                                onClick = { navController.navigate("numbers") }
+                            )
+                        }
+                        item {
+                            MenuCard(
+                                image = painterResource(id = R.drawable.writing),
+                                title = stringResource(id = R.string.learn_to_write),
+                                onClick = { navController.navigate("writing") }
+                            )
+                        }
+                        item {
+                            MenuCard(
+                                image = painterResource(id = R.drawable.quiz),
+                                title = stringResource(id = R.string.quiz),
+                                onClick = { navController.navigate("quiz") }
+                            )
+                        }
+                    }
+                }
+            )
+        }
+    }
+
+    @Composable
+    fun MenuCard(
+        image: Painter,
+        title: String,
+        onClick: () -> Unit
+    ) {
+        val context = LocalContext.current
+        val adUnitId = stringResource(id = R.string.ad_mob_interstitial_id)
+        var clicked by remember { mutableStateOf(false) }
+        val interstitialAdManager = remember { InterstitialAdManager(context, adUnitId) }
+
+        LaunchedEffect(Unit) {
+            interstitialAdManager.loadAd { }
+        }
+
+        val elevation by animateDpAsState(
+            targetValue = if (clicked) 8.dp else 4.dp
+        )
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateContentSize()
+                .clickable(onClick = {
+                    clicked = !clicked
+                    interstitialAdManager.showAd {
+                        onClick()
+                    }
+                }),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = elevation),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = image,
+                    contentDescription = title,
+                    modifier = Modifier
+                        .size(56.dp)
+                        .padding(end = 16.dp)
+                )
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
-    ) {
-        Scaffold(
-            topBar = { TopBar(drawerState, scope) },
-            content = { paddingValues ->
-                LazyColumn(modifier = Modifier.padding(paddingValues)) {
-                    item {
-                        BannerAdView()
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun TopBar(drawerState: DrawerState, scope: CoroutineScope) {
+        TopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = {
+                    scope.launch {
+                        if (drawerState.isClosed) drawerState.open() else drawerState.close()
                     }
-                    item {
-                        MenuCard(
-                            image = painterResource(id = R.drawable.abc64),
-                            title = stringResource(id = R.string.alphabet_learning),
-                            onClick = { navController.navigate("alphabet") }
-                        )
-                    }
-                    item {
-                        MenuCard(
-                            image = painterResource(id = R.drawable.number),
-                            title = stringResource(id = R.string.numbers),
-                            onClick = { navController.navigate("numbers") }
-                        )
-                    }
-                    item {
-                        MenuCard(
-                            image = painterResource(id = R.drawable.writing),
-                            title = stringResource(id = R.string.learn_to_write),
-                            onClick = { navController.navigate("writing") }
-                        )
-                    }
-//                    item {
-//                        MenuCard(
-//                            image = painterResource(id = R.drawable.syllabus),
-//                            title = stringResource(id = R.string.the_syllables),
-//                            onClick = { navController.navigate("syllables") }
-//                        )
-//                    }
-                    item {
-                        MenuCard(
-                            image = painterResource(id = R.drawable.quiz),
-                            title = stringResource(id = R.string.quiz),
-                            onClick = { navController.navigate("quiz") }
-                        )
-                    }
+                }) {
+                    Icon(
+                        Icons.Filled.Menu,
+                        contentDescription = "Menu",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
-            }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
         )
     }
-}
-
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 @Composable
-fun MenuCard(
-    image: Painter,
-    title: String,
-    onClick: () -> Unit
-) {
-    val context = LocalContext.current
-    val adUnitId = stringResource(id = R.string.ad_mob_interstitial_id)
-    var clicked by remember { mutableStateOf(false) }
-    val interstitialAdManager = remember { InterstitialAdManager(context, adUnitId) }
-
-    LaunchedEffect(Unit) {
-        interstitialAdManager.loadAd { }
-    }
-
-    val elevation by animateDpAsState(
-        targetValue = if (clicked) 12.dp else 4.dp
-    )
-
-    val padding by animateDpAsState(
-        targetValue = if (clicked) 24.dp else 16.dp
-    )
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable(onClick = {
-                clicked = !clicked
-                interstitialAdManager.showAd {
-                    onClick()
-                }
-            }),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = image,
-                contentDescription = title,
-                modifier = Modifier.size(48.dp)
-            )
-            Spacer(modifier = Modifier.width(24.dp))
-            Text(
-                style = MaterialTheme.typography.bodyLarge,
-                text = title,
-                fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar(drawerState: DrawerState, scope: kotlinx.coroutines.CoroutineScope) {
-    TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name)) },
-        navigationIcon = {
-            IconButton(onClick = {
-                scope.launch {
-                    if (drawerState.isClosed) drawerState.open() else drawerState.close()
-                }
-            }) {
-                Icon(Icons.Filled.Menu, contentDescription = "Menu")
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        )
-    )
+fun WritingPreview() {
+    val navController = rememberNavController()
+    MainScreen(navController)
 }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -268,18 +317,4 @@ fun TopBar(drawerState: DrawerState, scope: kotlinx.coroutines.CoroutineScope) {
             return arrayOfNulls(size)
         }
     }
-
-    @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight"
-)
-@Composable
-fun WritingPreview() {
-    val navController = rememberNavController()
-    MainScreen(navController)
-}
 }

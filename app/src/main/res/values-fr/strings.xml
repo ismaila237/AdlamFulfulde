@@ -87,10 +87,7 @@
     <string name="clear">Effacer</string>
     <string name="brush_alpha">Opacité du pinceau</string>
 
-    <!-- IDs AdMob -->
-    <string name="ad_mob_test_banner_id">ca-app-pub-7309731358576813/8916934438</string>
-    <string name="ad_mob_banner_id">ca-app-pub-7309731358576813/8916934438</string>
-    <string name="ad_mob_interstitial_id">ca-app-pub-7309731358576813/1701354046</string>
+
 
     <!-- Divers titres et étiquettes -->
     <string name="about">À propos</string>
@@ -123,5 +120,14 @@
         ]]>
     </string>
     <string name="contributors">Contributeurs</string>
+    <string name="show_adlam">Afficher Adlam</string>
+    <string name="show_latin">Afficher Latin</string>
+    <string name="hide_guide">Masquer le guide</string>
+    <string name="show_guide">Afficher le guide</string>
+    <string name="writing_uppercase">Écrire en majuscules</string>
+    <string name="show_hint">Afficher l\'indice</string>
+    <string name="play_again">Rejouer</string>
+    <string name="share_app">Partager l\'application</string>
+
 
 </resources>

@@ -100,12 +100,24 @@
     <string name="clear">Clear</string>
     <string name="brush_alpha">Brush Alpha</string>
     <string name="ad_mob_test_banner_id">ca-app-pub-7309731358576813/8916934438</string>
-    <string name="ad_mob_banner_id">ca-app-pub-8007948044081112/2121323032</string>
-    <string name="ad_mob_interstitial_id">ca-app-pub-8007948044081112/8223696954</string>
+
+    <string name="ad_mob_banner_id" translatable="false">ca-app-pub-7309731358576813/8598907954</string>
+    <string name="ad_mob_interstitial_id" translatable="false">ca-app-pub-7309731358576813/8580496587</string>
+<!--    <string name="ad_mob_banner_id">ca-app-pub-3940256099942544/6300978111</string>-->
+<!--    <string name="ad_mob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>-->
+
     <string name="privacy_policys">Privacy Policy</string>
     <string name="about">About</string>
     <string name="adlam_by_microsoft">Adlam by Microsoft</string>
     <string name="android_developers_guide">Android Developers Guide</string>
     <string name="contributors">Contributors</string>
+    <string name="show_adlam">Show Adlam</string>
+    <string name="show_latin">Show Latin</string>
+    <string name="hide_guide">Hide guide</string>
+    <string name="show_guide">Show guide</string>
+    <string name="writing_uppercase">Writing uppercase</string>
+    <string name="show_hint">Show hint</string>
+    <string name="play_again">Play again</string>
+    <string name="share_app">Share app</string>
 
 </resources>

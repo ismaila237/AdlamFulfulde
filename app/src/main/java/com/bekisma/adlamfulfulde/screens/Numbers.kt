@@ -42,9 +42,11 @@ fun NumbersScreen(navController: NavController) {
     val context = LocalContext.current
     val mediaPlayer = remember { MediaPlayer() }
     val numbersInAdlam = listOf("𞥐", "𞥑", "𞥒", "𞥓", "𞥔", "𞥕", "𞥖", "𞥗", "𞥘", "𞥙")
+    val numbersInLatin = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
 
     var isPlaying by remember { mutableStateOf(false) }
     var currentNumberIndex by remember { mutableStateOf(0) }
+    var showLatinNumbers by remember { mutableStateOf(false) }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -53,22 +55,32 @@ fun NumbersScreen(navController: NavController) {
     }
 
     Scaffold(
-        topBar = { NumbersTopAppBar(navController, isPlaying, onPlayPauseClick = { isPlaying = !isPlaying }) },
+        topBar = {
+            NumbersTopAppBar(
+                navController = navController,
+                isPlaying = isPlaying,
+                onPlayPauseClick = { isPlaying = !isPlaying },
+                showLatinNumbers = showLatinNumbers,
+                onToggleLatinNumbers = { showLatinNumbers = !showLatinNumbers }
+            )
+        },
         content = { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                BannerAdView() // Ajoutez la bannière ici
+                BannerAdView()
                 Spacer(modifier = Modifier.height(16.dp))
                 NumbersContent(
                     numbersInAdlam = numbersInAdlam,
+                    numbersInLatin = numbersInLatin,
                     currentNumberIndex = currentNumberIndex,
                     isPlaying = isPlaying,
-                    mediaPlayer = mediaPlayer,
+                    showLatinNumbers = showLatinNumbers,
                     onItemClick = { index ->
                         isPlaying = false
+                        currentNumberIndex = index
                         playSoundForNumber(context, numbersInAdlam[index], mediaPlayer)
                     },
                     innerPadding = innerPadding
@@ -84,8 +96,14 @@ fun NumbersScreen(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NumbersTopAppBar(navController: NavController, isPlaying: Boolean, onPlayPauseClick: () -> Unit) {
-    CenterAlignedTopAppBar(
+fun NumbersTopAppBar(
+    navController: NavController,
+    isPlaying: Boolean,
+    onPlayPauseClick: () -> Unit,
+    showLatinNumbers: Boolean,
+    onToggleLatinNumbers: () -> Unit
+) {
+    TopAppBar(
         title = { Text(stringResource(R.string.numbers_in_adlam)) },
         navigationIcon = {
             IconButton(onClick = { navController.navigateUp() }) {
@@ -93,6 +111,12 @@ fun NumbersTopAppBar(navController: NavController, isPlaying: Boolean, onPlayPau
             }
         },
         actions = {
+            IconButton(onClick = onToggleLatinNumbers) {
+                Icon(
+                    painter = painterResource(id = if (showLatinNumbers) R.drawable.adlam_icon else R.drawable.latin_icon),
+                    contentDescription = stringResource(if (showLatinNumbers) R.string.show_adlam else R.string.show_latin)
+                )
+            }
             IconButton(onClick = onPlayPauseClick) {
                 Icon(
                     painter = painterResource(id = if (isPlaying) R.drawable.pause else R.drawable.play),
@@ -100,7 +124,7 @@ fun NumbersTopAppBar(navController: NavController, isPlaying: Boolean, onPlayPau
                 )
             }
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -112,67 +136,65 @@ fun NumbersTopAppBar(navController: NavController, isPlaying: Boolean, onPlayPau
 @Composable
 fun NumbersContent(
     numbersInAdlam: List<String>,
+    numbersInLatin: List<String>,
     currentNumberIndex: Int,
     isPlaying: Boolean,
-    mediaPlayer: MediaPlayer,
+    showLatinNumbers: Boolean,
     onItemClick: (Int) -> Unit,
     innerPadding: PaddingValues
 ) {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 128.dp),
-            contentPadding = innerPadding,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            items(numbersInAdlam) { number ->
-                val index = numbersInAdlam.indexOf(number)
-                val isCurrentPlaying = currentNumberIndex == index
-                var clicked by remember { mutableStateOf(false) }
-
-                NumberCard(
-                    number = number,
-                    isCurrentPlaying = isCurrentPlaying,
-                    clicked = clicked,
-                    onClick = {
-                        clicked = !clicked
-                        onItemClick(index)
-                    }
-                )
-            }
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 128.dp),
+        contentPadding = PaddingValues(16.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(numbersInAdlam.size) { index ->
+            NumberCard(
+                adlamNumber = numbersInAdlam[index],
+                latinNumber = numbersInLatin[index],
+                isCurrentPlaying = currentNumberIndex == index,
+                showLatinNumbers = showLatinNumbers,
+                onClick = { onItemClick(index) }
+            )
         }
     }
 }
 
 @Composable
-fun NumberCard(number: String, isCurrentPlaying: Boolean, clicked: Boolean, onClick: () -> Unit) {
+fun NumberCard(
+    adlamNumber: String,
+    latinNumber: String,
+    isCurrentPlaying: Boolean,
+    showLatinNumbers: Boolean,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth()
-            .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                )
-            )
-            .clickable { onClick() },
+            .aspectRatio(1f)
+            .clickable(onClick = onClick)
+            .animateContentSize(),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (clicked || isCurrentPlaying) 12.dp else 6.dp
+            defaultElevation = if (isCurrentPlaying) 8.dp else 4.dp
         ),
         colors = CardDefaults.cardColors(
-            containerColor = if (isCurrentPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+            containerColor = if (isCurrentPlaying)
+                MaterialTheme.colorScheme.primaryContainer
+            else
+                MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .padding(16.dp)
-                .size(if (clicked || isCurrentPlaying) 75.dp else 65.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             Text(
-                text = number,
-                fontSize = 50.sp,
-                color = if (isCurrentPlaying) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
+                text = if (showLatinNumbers) latinNumber else adlamNumber,
+                fontSize = 40.sp,
+                color = if (isCurrentPlaying)
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                else
+                    MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.headlineLarge
             )
         }

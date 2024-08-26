@@ -109,10 +109,6 @@
     <string name="clear">مسح</string>
     <string name="brush_alpha">شفافية الفرشاة</string>
 
-    <!-- معرفات AdMob -->
-    <string name="ad_mob_test_banner_id">ca-app-pub-7309731358576813/8916934438</string>
-    <string name="ad_mob_banner_id">ca-app-pub-7309731358576813/8916934438</string>
-    <string name="ad_mob_interstitial_id">ca-app-pub-7309731358576813/1701354046</string>
 
     <!-- عناوين وعلامات متنوعة -->
     <string name="about">حول</string>
@@ -125,5 +121,14 @@
     <string name="best_score">أفضل نتيجة</string>
     <string name="remaining_time">الوقت المتبقي</string>
     <string name="contributors">المساهمون</string>
+    <string name="show_adlam">إظهار أدلام</string>
+    <string name="show_latin">إظهار اللاتينية</string>
+    <string name="hide_guide">إخفاء الدليل</string>
+    <string name="show_guide">إظهار الدليل</string>
+    <string name="writing_uppercase">كتابة الأحرف الكبيرة</string>
+    <string name="show_hint">إظهار التلميح</string>
+    <string name="play_again">العب مرة أخرى</string>
+    <string name="share_app">شارك التطبيق</string>
+
 
 </resources>

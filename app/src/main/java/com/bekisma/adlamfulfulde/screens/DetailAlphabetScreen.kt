@@ -1,5 +1,3 @@
-// package com.bekisma.adlamfulfulde.screens
-
 package com.bekisma.adlamfulfulde.screens
 
 import android.content.Context
@@ -7,7 +5,7 @@ import android.content.res.Configuration
 import android.media.MediaPlayer
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +35,7 @@ import com.bekisma.adlamfulfulde.ads.BannerAdView
 import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme
 import java.util.Locale
 
+// ... (Garder les mappings et autres variables globales inchangés)
 val adlamToLatinMap = mapOf(
     "𞤀" to "A", "𞤁" to "DA", "𞤂" to "LA", "𞤃" to "MA", "𞤄" to "BA", "𞤅" to "SA", "𞤆" to "PA",
     "𞤇" to "ƁA", "𞤈" to "RA", "𞤉" to "E", "𞤊" to "FA", "𞤋" to "I", "𞤌" to "O", "𞤍" to "ƊA", "𞤎" to "ƳA",
@@ -51,17 +51,17 @@ val adlamAlphabet = listOf(
     "𞤐𞤁", "𞤐𞤄", "𞤐𞤔", "𞤐𞤘"
 )
 val exampleWordsMap = mapOf(
-    "𞤀" to listOf("𞤢𞤲𞤣𞤢𞤤"), "𞤁" to listOf("𞤁𞤫𞤦𞥆𞤮"), "𞤂" to listOf("𞤂𞤫𞤱𞤪𞤵"),
-    "𞤃" to listOf("𞤃𞤢𞤱𞤲𞤣𞤫"), "𞤄" to listOf("𞤄𞤢𞥄𞤤𞤵"), "𞤅" to listOf("𞤅𞤵𞥅𞤣𞤵"),
+    "𞤀" to listOf("𞤢𞤲𞥋𞤣𞤢𞤤"), "𞤁" to listOf("𞤁𞤫𞤦𞥆𞤮"), "𞤂" to listOf("𞤂𞤫𞤱𞤪𞤵"),
+    "𞤃" to listOf("𞤃𞤢𞤱𞤲𞤣𞤫"), "𞤄" to listOf("𞤄𞤢𞥄𞤤𞤭"), "𞤅" to listOf("𞤅𞤵𞥅𞤣𞤵"),
     "𞤆" to listOf("𞤆𞤵𞤷𞥆𞤵"), "𞤇" to listOf("𞤇𞤢𞥄𞤱𞤮"), "𞤈" to listOf("𞤈𞤫𞤱𞤩𞤫"),
-    "𞤉" to listOf("𞤉𞤺𞥆𞤮𞤤"), "𞤊" to listOf("𞤊𞤮𞤱𞤪𞤵"), "𞤋" to listOf("𞤋𞤲𞤲𞤣𞤫𞥅𞤪𞤭"),
-    "𞤌" to listOf("𞤌𞤲𞤼𞤭𞤪𞤺𞤢𞤤"), "𞤍" to listOf("𞤍𞤢𞤯𞤭"), "𞤎" to listOf("𞤎𞤢𞤥𞤮𞥅𞤱𞤮"),
-    "𞤏" to listOf("𞤏𞤢𞥄𞤶𞤵"), "𞤐" to listOf("𞤐𞤢𞤺𞥆𞤫"), "𞤑" to listOf("𞤳𞤢𞥄𞤯𞤮"),
-    "𞤒" to listOf("𞤒𞤢𞥄𞤪𞤫"), "𞤓" to listOf("𞤓𞤶𞤵𞤲𞤫𞤪𞤫"), "𞤔" to listOf("𞤔𞤢𞤲𞤺𞤮"),
+    "𞤉" to listOf("𞤉𞤺𞥆𞤮𞤤"), "𞤊" to listOf("𞤊𞤮𞤱𞤪𞤵"), "𞤋" to listOf("𞤋𞤲𞥋𞤣𞤫𞥅𞤪𞤭"),
+    "𞤌" to listOf("𞤌𞥅𞤤𞤣𞤭"), "𞤍" to listOf("𞤍𞤢𞤯𞤭"), "𞤎" to listOf("𞤎𞤢𞤥𞤮𞥅𞤱𞤤"),
+    "𞤏" to listOf("𞤏𞤢𞥄𞤲𞤣𞤵"), "𞤐" to listOf("𞤐𞤢𞤺𞥆𞤫"), "𞤑" to listOf("𞤑𞤵𞤪𞤮𞤤⁏"),
+    "𞤒" to listOf("𞤒𞤢𞥄𞤪𞤫"), "𞤓" to listOf("𞤓𞤲𞤮𞤪𞤣𞤵"), "𞤔" to listOf("𞤔𞤢𞤲𞥋𞤺𞤮"),
     "𞤕" to listOf("𞤕𞤭𞤪𞤺𞤵"), "𞤖" to listOf("𞤖𞤮𞤪𞤣𞤫"), "𞤗" to listOf("𞤗𞤮𞤴𞤭𞥅𞤪"),
-    "𞤘" to listOf("𞤘𞤮𞤪𞤳𞤮"), "𞤙" to listOf("𞤙𞤵𞥅𞤲𞤺𞤭𞤤"), "𞤚" to listOf("𞤚𞤢𞤼𞤭"),
-    "𞤛" to listOf("𞤛𞤢𞤲𞥆𞤢𞤱𞤮𞤤"), "𞤐𞤁" to listOf("𞤐𞤣𞤢𞤹𞤢𞤱𞤢𞤤"), "𞤐𞤄" to listOf("𞤐𞤄𞤫𞥅𞤱𞤢"),
-    "𞤐𞤔" to listOf("𞤐𞤔𞤵𞤥𞤪𞤭"), "𞤐𞤘" to listOf("𞤐𞤘𞤢𞤴𞤵𞥅𞤪𞤭")
+    "𞤘" to listOf("𞤘𞤮𞤪𞤳𞤮"), "𞤙" to listOf("𞤙𞤢𞥄𞤳𞤵"), "𞤚" to listOf("𞤚𞤢𞤼𞤭"),
+    "𞤛" to listOf("𞤛𞤢𞤪𞤮𞤤"), "𞤐𞤁" to listOf("𞤐𞤣𞤢𞥄𞤥𞤲𞤣𞤭"), "𞤐𞤄" to listOf("𞤐𞤄𞤫𞥅𞤱𞤢"),
+    "𞤐𞤔" to listOf("𞤐𞤔𞤵𞤥𞤪𞤭"), "𞤐𞤘" to listOf("𞤐𞤺𞤢𞥄𞤲𞤣𞤭")
 )
 val adlamAudioMap = mapOf(
     "𞤀" to R.raw.adlam1_1, "𞤁" to R.raw.adlam2_1, "𞤂" to R.raw.adlam3_1,
@@ -95,7 +95,7 @@ fun playSoundForLetter(context: Context, letter: String) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun DetailAlphabetScreen(
     letter: String,
@@ -118,57 +118,62 @@ fun DetailAlphabetScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
-                // Display the banner ad at the top of the content
                 BannerAdView()
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Column(
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .weight(1f)
+                        .fillMaxWidth()
                         .pointerInput(Unit) {
                             detectHorizontalDragGestures { change, dragAmount ->
                                 change.consume()
-                                if (dragAmount > 0) {
-                                    if (currentIndex > 0) {
+                                when {
+                                    dragAmount > 0 && currentIndex > 0 -> {
                                         transitionState.targetState = currentIndex - 1
                                         currentIndex--
-                                        playSoundForLetter(context, alphabetList[currentIndex])
                                     }
-                                } else {
-                                    if (currentIndex < alphabetList.size - 1) {
+                                    dragAmount < 0 && currentIndex < alphabetList.size - 1 -> {
                                         transitionState.targetState = currentIndex + 1
                                         currentIndex++
-                                        playSoundForLetter(context, alphabetList[currentIndex])
                                     }
                                 }
+                                playSoundForLetter(context, alphabetList[currentIndex])
                             }
-                        },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                        }
                 ) {
-                    AnimatedVisibility(
-                        visible = true,
-                        enter = fadeIn(animationSpec = tween(durationMillis = 300)) + slideInHorizontally(),
-                        exit = fadeOut(animationSpec = tween(durationMillis = 300)) + slideOutHorizontally()
-                    ) {
-                        DisplayExamples(currentIndex, alphabetList)
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    AnimatedVisibility(
-                        visible = true,
-                        enter = fadeIn(animationSpec = tween(durationMillis = 300)) + slideInHorizontally(),
-                        exit = fadeOut(animationSpec = tween(durationMillis = 300)) + slideOutHorizontally()
-                    ) {
-                        DisplayLetters(alphabetList, currentIndex)
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    NavigationButtons(currentIndex, alphabetList.size) { newIndex ->
-                        transitionState.targetState = newIndex
-                        currentIndex = newIndex
-                        playSoundForLetter(context, alphabetList[currentIndex])
+                    AnimatedContent(
+                        targetState = currentIndex,
+                        transitionSpec = {
+                            if (targetState > initialState) {
+                                slideInHorizontally { width -> width } + fadeIn() with
+                                        slideOutHorizontally { width -> -width } + fadeOut()
+                            } else {
+                                slideInHorizontally { width -> -width } + fadeIn() with
+                                        slideOutHorizontally { width -> width } + fadeOut()
+                            }.using(SizeTransform(clip = false))
+                        }
+                    ) { targetIndex ->
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            DisplayLetters(alphabetList, targetIndex)
+                            Spacer(modifier = Modifier.height(24.dp))
+                            DisplayExamples(targetIndex, alphabetList)
+                        }
                     }
                 }
+
+                NavigationButtons(currentIndex, alphabetList.size) { newIndex ->
+                    transitionState.targetState = newIndex
+                    currentIndex = newIndex
+                    playSoundForLetter(context, alphabetList[currentIndex])
+                }
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     )
@@ -199,8 +204,11 @@ fun DetailTopBar(navController: NavController, onInfoClick: () -> Unit) {
                 )
             }
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
     )
 }
@@ -211,90 +219,71 @@ fun DisplayLetters(alphabetList: List<String>, currentIndex: Int) {
     val lowerCaseLetter = currentLetter.lowercase(Locale.ROOT)
     val latinEquivalent = adlamToLatinMap[currentLetter] ?: "?"
 
-    val transitionState = remember { MutableTransitionState(currentLetter) }
-    transitionState.targetState = currentLetter
-
-    val transition = updateTransition(transitionState, label = "LetterTransition")
-
-    val letterSize by transition.animateDp(
-        transitionSpec = {
-            if (initialState != targetState) {
-                spring(dampingRatio = Spring.DampingRatioMediumBouncy)
-            } else {
-                spring(dampingRatio = Spring.DampingRatioNoBouncy)
-            }
-        },
-        label = "LetterSize"
-    ) { letter ->
-        if (letter == currentLetter) 120.dp else 100.dp
-    }
-
-    val alpha by transition.animateFloat(
-        transitionSpec = { tween(durationMillis = 500) },
-        label = "AlphaTransition"
-    ) { letter ->
-        if (letter == currentLetter) 1f else 0.5f
-    }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.padding(16.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.alpha(alpha)
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+            shape = RoundedCornerShape(16.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(24.dp)
             ) {
-                Text(
-                    text = currentLetter,
-                    fontSize = letterSize.value.sp,
-                    style = MaterialTheme.typography.displayLarge.copy(
-                        shadow = Shadow(
-                            color = Color.Gray,
-                            offset = Offset(2f, 2f),
-                            blurRadius = 8f
-                        )
-                    ),
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = currentLetter,
+                        fontSize = 100.sp,
+                        style = MaterialTheme.typography.displayLarge.copy(
+                            shadow = Shadow(
+                                color = Color.Gray,
+                                offset = Offset(2f, 2f),
+                                blurRadius = 8f
+                            )
+                        ),
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
 
+                    Text(
+                        text = "-",
+                        fontSize = 50.sp,
+                        modifier = Modifier.alpha(0.7f)
+                    )
+                    Text(
+                        text = lowerCaseLetter,
+                        fontSize = 80.sp,
+                        style = MaterialTheme.typography.displayLarge.copy(
+                            shadow = Shadow(
+                                color = Color.Gray,
+                                offset = Offset(2f, 2f),
+                                blurRadius = 8f
+                            )
+                        ),
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 Text(
-                    text = "-",
-                    fontSize = 50.sp,
-                    modifier = Modifier.alpha(0.7f)
-                )
-                Text(
-                    text = lowerCaseLetter,
-                    fontSize = 100.sp,
-                    style = MaterialTheme.typography.displayLarge.copy(
+                    text = latinEquivalent,
+                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.bodyLarge.copy(
                         shadow = Shadow(
                             color = Color.Gray,
-                            offset = Offset(2f, 2f),
-                            blurRadius = 8f
+                            offset = Offset(1f, 1f),
+                            blurRadius = 2f
                         )
                     ),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
-            Text(
-                text = latinEquivalent,
-                fontSize = 24.sp,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    shadow = Shadow(
-                        color = Color.Gray,
-                        offset = Offset(2f, 2f),
-                        blurRadius = 4f
-                    )
-                ),
-                color = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.padding(top = 8.dp)
-            )
         }
     }
 }
@@ -302,33 +291,55 @@ fun DisplayLetters(alphabetList: List<String>, currentIndex: Int) {
 @Composable
 fun DisplayExamples(currentIndex: Int, alphabetList: List<String>) {
     val currentLetter = alphabetList[currentIndex]
-    Column(
+    val vowels = listOf("𞤀", "𞤉", "𞤋", "𞤌", "𞤓")
+
+    Card(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
-        exampleWordsMap[currentLetter]?.forEach { example ->
-            val formattedExample = buildAnnotatedString {
-                example.forEach { char ->
-                    if (char.toString() == currentLetter) {
-                        withStyle(style = SpanStyle(color = Color(0xFFFFA500))) { // Orange color for current letter
-                            append(char)
-                        }
-                    } else {
-                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                            append(char)
+        Column(
+            modifier = Modifier
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.examples),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            exampleWordsMap[currentLetter]?.forEach { example ->
+                val formattedExample = buildAnnotatedString {
+                    example.forEach { char ->
+                        when {
+                            char.toString() == currentLetter -> {
+                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)) {
+                                    append(char)
+                                }
+                            }
+                            char.toString() in vowels -> {
+                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
+                                    append(char)
+                                }
+                            }
+                            else -> {
+                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
+                                    append(char)
+                                }
+                            }
                         }
                     }
                 }
+                Text(
+                    text = formattedExample,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 30.sp
+                )
             }
-            Text(
-                text = formattedExample,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(4.dp),
-                fontSize = 30.sp
-            )
         }
     }
 }
@@ -393,7 +404,6 @@ fun ReadingRulesDialog(onDismiss: () -> Unit) {
     uiMode = Configuration.UI_MODE_NIGHT_NO,
     name = "DefaultPreviewLight"
 )
-@Preview(showBackground = true)
 @Composable
 fun DetailAlphabetScreenPreview() {
     val navController = rememberNavController()
