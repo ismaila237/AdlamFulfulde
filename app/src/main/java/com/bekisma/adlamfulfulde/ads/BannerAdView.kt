@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BannerAdView(
     modifier: Modifier = Modifier,
-    adSize: AdSize = AdSize.FULL_BANNER,
+    adSize: AdSize = AdSize.BANNER,
     maxRetries: Int = 3,
     retryDelay: Long = 5000 // 5 seconds
 ) {

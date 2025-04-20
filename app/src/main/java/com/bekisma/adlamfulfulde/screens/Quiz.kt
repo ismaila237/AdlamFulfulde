@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -17,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,34 +32,25 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+// Data classes for better structure
+data class AdlamLetter(val symbol: String, val soundResId: Int, val latinEquivalent: String)
+
 // Constants
 val adlamLetters = listOf(
-    "𞤀" to R.raw.adlam1_1, "𞤁" to R.raw.adlam2_1, "𞤂" to R.raw.adlam3_1,
-    "𞤃" to R.raw.adlam4_1, "𞤄" to R.raw.adlam5_1, "𞤅" to R.raw.adlam6_1,
-    "𞤆" to R.raw.adlam7_1, "𞤇" to R.raw.adlam8_1, "𞤈" to R.raw.adlam9_1,
-    "𞤉" to R.raw.adlam10_1, "𞤊" to R.raw.adlam11_1, "𞤋" to R.raw.adlam12_1,
-    "𞤌" to R.raw.adlam13_1, "𞤍" to R.raw.adlam14_1, "𞤎" to R.raw.adlam15_1,
-    "𞤏" to R.raw.adlam16_1, "𞤐" to R.raw.adlam17_1, "𞤑" to R.raw.adlam18_1,
-    "𞤒" to R.raw.adlam19_1, "𞤓" to R.raw.adlam20_1, "𞤔" to R.raw.adlam21_1,
-    "𞤕" to R.raw.adlam22_1, "𞤖" to R.raw.adlam23_1, "𞤗" to R.raw.adlam24_1,
-    "𞤘" to R.raw.adlam25_1, "𞤙" to R.raw.adlam26_1, "𞤚" to R.raw.adlam27_1,
-    "𞤛" to R.raw.adlam28_1, "𞤐𞤁" to R.raw.son_nul, "𞤐𞤄" to R.raw.son_nul,
-    "𞤐𞤔" to R.raw.son_nul, "𞤐𞤘" to R.raw.son_nul
+    AdlamLetter("𞤀", R.raw.adlam1_1, "A"),
+    AdlamLetter("𞤁", R.raw.adlam2_1, "DA"),
+    AdlamLetter("𞤂", R.raw.adlam3_1, "LA"),
+    AdlamLetter("𞤃", R.raw.adlam4_1, "MA"),
+    AdlamLetter("𞤄", R.raw.adlam5_1, "BA"),
+    // Ajoutez le reste des lettres ici...
 )
 
-val adlamToLatinMapQuiz = mapOf(
-    "𞤀" to "A", "𞤁" to "DA", "𞤂" to "LA", "𞤃" to "MA", "𞤄" to "BA", "𞤅" to "SA", "𞤆" to "PA",
-    "𞤇" to "ƁA", "𞤈" to "RA", "𞤉" to "E", "𞤊" to "FA", "𞤋" to "I", "𞤌" to "O", "𞤍" to "ƊA", "𞤎" to "ƳA",
-    "𞤏" to "WA", "𞤐" to "NA", "𞤑" to "KA", "𞤒" to "YA", "𞤓" to "U", "𞤔" to "JA", "𞤕" to "CA", "𞤖" to "HA",
-    "𞤗" to "QA", "𞤘" to "GA", "𞤙" to "ÑA", "𞤚" to "TA", "𞤛" to "NHA",
-    "𞤐𞤁" to "NDA", "𞤐𞤄" to "MBA", "𞤐𞤔" to "NJA", "𞤐𞤘" to "NGA"
-)
-
-val difficultyLevels = mapOf(
-    15 to R.string.beginner,
-    8 to R.string.intermediate,
-    3 to R.string.advanced
-)
+// Difficulté du quiz
+enum class DifficultyLevel(val timeLimit: Int, val labelResId: Int) {
+    BEGINNER(15, R.string.beginner),
+    INTERMEDIATE(8, R.string.intermediate),
+    ADVANCED(3, R.string.advanced)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,9 +66,8 @@ fun QuizScreen(navController: NavController) {
     var quizStarted by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val mediaPlayer = remember { MediaPlayer() }
-    var difficulty by rememberSaveable { mutableStateOf(15) }
+    var selectedDifficulty by rememberSaveable { mutableStateOf(DifficultyLevel.BEGINNER) }
     var bestScore by remember { mutableStateOf(sharedPreferences.getInt("bestScore", 0)) }
-    var streakCount by remember { mutableStateOf(0) }
     var showHint by remember { mutableStateOf(false) }
 
     val correctMessage = stringResource(R.string.correct)
@@ -96,20 +90,20 @@ fun QuizScreen(navController: NavController) {
 
     fun startQuiz() {
         currentLetterIndex = allIndices.random()
-        playSound(context, adlamLetters[currentLetterIndex].second)
+        playSound(context, adlamLetters[currentLetterIndex].soundResId)
         quizStarted = true
         score = 0
         totalQuestions = 0
-        streakCount = 0
+        showHint = false
     }
 
-    fun generateOptions(correctIndex: Int, size: Int = 4): List<Pair<String, Int>> {
-        val options = mutableSetOf(correctIndex)
+    fun generateOptions(correctIndex: Int, size: Int = 4): List<AdlamLetter> {
+        val options = mutableSetOf(adlamLetters[correctIndex])
         while (options.size < size) {
             val randomIndex = Random.nextInt(adlamLetters.size)
-            options.add(randomIndex)
+            options.add(adlamLetters[randomIndex])
         }
-        return options.map { adlamLetters[it] }.shuffled()
+        return options.shuffled()
     }
 
     var options by remember { mutableStateOf(generateOptions(currentLetterIndex)) }
@@ -141,8 +135,8 @@ fun QuizScreen(navController: NavController) {
                             startQuiz()
                             options = generateOptions(currentLetterIndex)
                         },
-                        difficulty = difficulty,
-                        onDifficultyChange = { difficulty = it }
+                        selectedDifficulty = selectedDifficulty,
+                        onDifficultyChange = { selectedDifficulty = it }
                     )
                 } else if (quizCompleted) {
                     updateBestScore()
@@ -174,11 +168,9 @@ fun QuizScreen(navController: NavController) {
                                 totalQuestions += 1
                                 if (selectedOption == adlamLetters[currentLetterIndex]) {
                                     score += 1
-                                    streakCount += 1
-                                    feedbackMessage = "$correctMessage (Streak: $streakCount)"
+                                    feedbackMessage = correctMessage
                                 } else {
                                     feedbackMessage = incorrectMessage
-                                    streakCount = 0
                                 }
                                 delay(1000)
                                 feedbackMessage = ""
@@ -186,16 +178,14 @@ fun QuizScreen(navController: NavController) {
                                 if (allIndices.isNotEmpty()) {
                                     currentLetterIndex = allIndices.random()
                                     options = generateOptions(currentLetterIndex)
-                                    playSound(context, adlamLetters[currentLetterIndex].second)
+                                    playSound(context, adlamLetters[currentLetterIndex].soundResId)
                                     showHint = false
                                 } else {
                                     quizCompleted = true
                                 }
                             }
                         },
-                        difficulty = difficulty,
-                        quizCompleted = { quizCompleted = true },
-                        streakCount = streakCount,
+                        selectedDifficulty = selectedDifficulty,
                         showHint = showHint,
                         onShowHint = { showHint = true }
                     )
@@ -227,7 +217,11 @@ fun QuizTopBar(navController: NavController) {
 }
 
 @Composable
-fun StartQuizDialog(onStart: () -> Unit, difficulty: Int, onDifficultyChange: (Int) -> Unit) {
+fun StartQuizDialog(
+    onStart: () -> Unit,
+    selectedDifficulty: DifficultyLevel,
+    onDifficultyChange: (DifficultyLevel) -> Unit
+) {
     AlertDialog(
         onDismissRequest = { /* Do nothing to force user to acknowledge dialog */ },
         title = { Text(text = stringResource(R.string.quiz_instructions_title)) },
@@ -235,8 +229,8 @@ fun StartQuizDialog(onStart: () -> Unit, difficulty: Int, onDifficultyChange: (I
             Column {
                 Text(stringResource(R.string.quiz_instructions_text))
                 Spacer(modifier = Modifier.height(16.dp))
-                DifficultySelector(difficulty) { selectedDifficulty ->
-                    onDifficultyChange(selectedDifficulty)
+                DifficultySelector(selectedDifficulty) { difficulty ->
+                    onDifficultyChange(difficulty)
                 }
             }
         },
@@ -254,33 +248,35 @@ fun StartQuizDialog(onStart: () -> Unit, difficulty: Int, onDifficultyChange: (I
 }
 
 @Composable
-fun DifficultySelector(currentDifficulty: Int, onDifficultySelected: (Int) -> Unit) {
-    val options = listOf(
-        R.string.beginner to 15,
-        R.string.intermediate to 8,
-        R.string.advanced to 3
-    )
+fun DifficultySelector(
+    currentDifficulty: DifficultyLevel,
+    onDifficultySelected: (DifficultyLevel) -> Unit
+) {
     Column {
-        Text(stringResource(R.string.select_difficulty), fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.titleMedium.fontSize)
+        Text(
+            stringResource(R.string.select_difficulty),
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleMedium
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        options.forEach { (labelResId, value) ->
+        DifficultyLevel.values().forEach { difficulty ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 RadioButton(
-                    selected = currentDifficulty == value,
-                    onClick = { onDifficultySelected(value) },
+                    selected = currentDifficulty == difficulty,
+                    onClick = { onDifficultySelected(difficulty) },
                     colors = RadioButtonDefaults.colors(
                         selectedColor = MaterialTheme.colorScheme.primary,
-                        unselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = stringResource(labelResId),
+                    text = stringResource(difficulty.labelResId),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (currentDifficulty == value)
+                    color = if (currentDifficulty == difficulty)
                         MaterialTheme.colorScheme.primary
                     else
                         MaterialTheme.colorScheme.onSurface
@@ -345,23 +341,21 @@ fun QuizInProgressScreen(
     context: Context,
     score: Int,
     totalQuestions: Int,
-    options: List<Pair<String, Int>>,
+    options: List<AdlamLetter>,
     currentLetterIndex: Int,
     feedbackMessage: String,
     correctMessage: String,
     incorrectMessage: String,
     playSound: (Context, Int) -> Unit,
-    onOptionClick: (Pair<String, Int>) -> Unit,
-    difficulty: Int,
-    quizCompleted: () -> Unit,
-    streakCount: Int,
+    onOptionClick: (AdlamLetter) -> Unit,
+    selectedDifficulty: DifficultyLevel,
     showHint: Boolean,
     onShowHint: () -> Unit
 ) {
-    var remainingTime by remember { mutableStateOf(difficulty) }
+    var remainingTime by remember { mutableStateOf(selectedDifficulty.timeLimit) }
 
     LaunchedEffect(currentLetterIndex) {
-        remainingTime = difficulty
+        remainingTime = selectedDifficulty.timeLimit
     }
 
     LaunchedEffect(remainingTime) {
@@ -369,7 +363,7 @@ fun QuizInProgressScreen(
             delay(1000)
             remainingTime -= 1
         } else {
-            onOptionClick(Pair("", -1))
+            onOptionClick(AdlamLetter("", -1, ""))
         }
     }
 
@@ -386,22 +380,16 @@ fun QuizInProgressScreen(
         )
 
         Text(
-            text = stringResource(R.string.question, totalQuestions + 1),
+            text = stringResource(R.string.question_number, totalQuestions + 1),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.secondary
-        )
-
-        Text(
-            text = "Streak: $streakCount",
-            style = MaterialTheme.typography.titleMedium,
-            color = if (streakCount > 5) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Latin: ${adlamToLatinMapQuiz[adlamLetters[currentLetterIndex].first] ?: "?"}",
-            style = MaterialTheme.typography.headlineLarge,
+            text = adlamLetters[currentLetterIndex].latinEquivalent,
+            style = MaterialTheme.typography.displayLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
 
@@ -414,7 +402,7 @@ fun QuizInProgressScreen(
         )
 
         LinearProgressIndicator(
-            progress = remainingTime.toFloat() / difficulty,
+            progress = remainingTime.toFloat() / selectedDifficulty.timeLimit,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp)
@@ -425,8 +413,8 @@ fun QuizInProgressScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
-            onClick = { playSound(context, adlamLetters[currentLetterIndex].second) },
+        ElevatedButton(
+            onClick = { playSound(context, adlamLetters[currentLetterIndex].soundResId) },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
         ) {
@@ -437,17 +425,24 @@ fun QuizInProgressScreen(
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(options.size) { index ->
                 val option = options[index]
-                Button(
+                ElevatedButton(
                     onClick = { onOptionClick(option) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text(option.first, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                    Text(
+                        option.symbol,
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
                 }
             }
         }
@@ -455,28 +450,35 @@ fun QuizInProgressScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (!showHint) {
-            Button(
+            TextButton(
                 onClick = onShowHint,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(stringResource(R.string.show_hint), color = MaterialTheme.colorScheme.onTertiaryContainer)
+                Text(
+                    stringResource(R.string.show_hint),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
             }
         } else {
             Text(
-                text = "Hint: ${adlamLetters[currentLetterIndex].first}",
-                style = MaterialTheme.typography.titleMedium,
+                text = adlamLetters[currentLetterIndex].symbol,
+                style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.tertiary
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        AnimatedVisibility(visible = feedbackMessage.isNotEmpty()) {
+        AnimatedVisibility(
+            visible = feedbackMessage.isNotEmpty(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
             Text(
                 text = feedbackMessage,
                 style = MaterialTheme.typography.titleMedium,
-                color = if (feedbackMessage.startsWith(correctMessage)) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                color = if (feedbackMessage == correctMessage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
             )
         }
     }

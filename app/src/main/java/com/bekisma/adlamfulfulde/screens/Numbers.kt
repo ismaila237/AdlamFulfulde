@@ -1,5 +1,3 @@
-// package com.bekisma.adlamfulfulde.screens
-
 package com.bekisma.adlamfulfulde.screens
 
 import android.content.Context
@@ -8,7 +6,10 @@ import android.media.MediaPlayer
 import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,11 +22,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -65,25 +64,38 @@ fun NumbersScreen(navController: NavController) {
             )
         },
         content = { innerPadding ->
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                BannerAdView()
-                Spacer(modifier = Modifier.height(16.dp))
-                NumbersContent(
-                    numbersInAdlam = numbersInAdlam,
-                    numbersInLatin = numbersInLatin,
-                    currentNumberIndex = currentNumberIndex,
-                    isPlaying = isPlaying,
-                    showLatinNumbers = showLatinNumbers,
-                    onItemClick = { index ->
-                        isPlaying = false
-                        currentNumberIndex = index
-                        playSoundForNumber(context, numbersInAdlam[index], mediaPlayer)
-                    },
-                    innerPadding = innerPadding
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 56.dp), // Réserve un espace pour la bannière
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    NumbersContent(
+                        numbersInAdlam = numbersInAdlam,
+                        numbersInLatin = numbersInLatin,
+                        currentNumberIndex = currentNumberIndex,
+                        isPlaying = isPlaying,
+                        showLatinNumbers = showLatinNumbers,
+                        onItemClick = { index ->
+                            isPlaying = false
+                            currentNumberIndex = index
+                            playSoundForNumber(context, numbersInAdlam[index], mediaPlayer)
+                        },
+                        innerPadding = innerPadding
+                    )
+                }
+
+                // Bannières en bas
+                BannerAdView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
                 )
             }
         }
@@ -104,23 +116,35 @@ fun NumbersTopAppBar(
     onToggleLatinNumbers: () -> Unit
 ) {
     TopAppBar(
-        title = { Text(stringResource(R.string.numbers_in_adlam)) },
+        title = {
+            Text(
+                text = stringResource(R.string.numbers_in_adlam),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        },
         navigationIcon = {
             IconButton(onClick = { navController.navigateUp() }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back))
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(R.string.back),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
         },
         actions = {
             IconButton(onClick = onToggleLatinNumbers) {
                 Icon(
                     painter = painterResource(id = if (showLatinNumbers) R.drawable.adlam_icon else R.drawable.latin_icon),
-                    contentDescription = stringResource(if (showLatinNumbers) R.string.show_adlam else R.string.show_latin)
+                    contentDescription = stringResource(if (showLatinNumbers) R.string.show_adlam else R.string.show_latin),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
             IconButton(onClick = onPlayPauseClick) {
                 Icon(
                     painter = painterResource(id = if (isPlaying) R.drawable.pause else R.drawable.play),
-                    contentDescription = stringResource(if (isPlaying) R.string.pause else R.string.play)
+                    contentDescription = stringResource(if (isPlaying) R.string.pause else R.string.play),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         },
@@ -144,8 +168,10 @@ fun NumbersContent(
     innerPadding: PaddingValues
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 128.dp),
+        columns = GridCells.Fixed(3), // 3 éléments par ligne
         contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp), // Espacement vertical
+        horizontalArrangement = Arrangement.spacedBy(8.dp), // Espacement horizontal
         modifier = Modifier.fillMaxSize()
     ) {
         items(numbersInAdlam.size) { index ->
@@ -168,21 +194,34 @@ fun NumberCard(
     showLatinNumbers: Boolean,
     onClick: () -> Unit
 ) {
+    val animatedElevation by animateDpAsState(
+        targetValue = if (isCurrentPlaying) 12.dp else 6.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+
     Card(
         modifier = Modifier
             .padding(8.dp)
             .aspectRatio(1f)
             .clickable(onClick = onClick)
-            .animateContentSize(),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isCurrentPlaying) 8.dp else 4.dp
-        ),
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            ),
+        elevation = CardDefaults.cardElevation(defaultElevation = animatedElevation),
         colors = CardDefaults.cardColors(
             containerColor = if (isCurrentPlaying)
-                MaterialTheme.colorScheme.primaryContainer
+                MaterialTheme.colorScheme.primary
             else
                 MaterialTheme.colorScheme.surfaceVariant
-        )
+        ),
+        border = if (isCurrentPlaying) {
+            BorderStroke(2.dp, MaterialTheme.colorScheme.primaryContainer)
+        } else {
+            null
+        }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -190,9 +229,9 @@ fun NumberCard(
         ) {
             Text(
                 text = if (showLatinNumbers) latinNumber else adlamNumber,
-                fontSize = 40.sp,
+                fontSize = 48.sp,
                 color = if (isCurrentPlaying)
-                    MaterialTheme.colorScheme.onPrimaryContainer
+                    MaterialTheme.colorScheme.onPrimary
                 else
                     MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.headlineLarge
@@ -262,13 +301,12 @@ fun HandlePlayback(
 
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
+    name = "Dark Mode"
 )
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight"
+    name = "Light Mode"
 )
-@Preview(showBackground = true)
 @Composable
 fun PreviewNumbersScreen() {
     val navController = rememberNavController()

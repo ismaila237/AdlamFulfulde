@@ -130,5 +130,19 @@
     <string name="play_again">العب مرة أخرى</string>
     <string name="share_app">شارك التطبيق</string>
 
+    <string name="theme">السمة</string>
+    <string name="theme_selection">اختيار السمة</string>
+    <string name="theme_default">افتراضي</string>
+    <string name="theme_blue">أزرق</string>
+    <string name="theme_green">أخضر</string>
+    <string name="theme_purple">أرجواني</string>
+    <string name="theme_orange">برتقالي</string>
+    <string name="references">References</string>
+    <string name="question_number">Question number</string>
+    <string name="discover_the_adlam_alphabet">اكتشف الأبجدية أدلام</string>
+    <string name="practice_adlam_numbers">تمرن على أرقام أدلام</string>
+    <string name="improve_your_writing_skills">حسّن مهاراتك في الكتابة</string>
+    <string name="test_your_knowledge">اختبر معلوماتك</string>
+
 
 </resources>

@@ -49,78 +49,90 @@ fun WritingScreen(navController: NavController) {
             )
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+                .padding(innerPadding)
         ) {
+            // Contenu principal
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 70.dp), // Réserver un espace pour la bannière
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                BannerAdView()
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                     ) {
-                        Text(
-                            text = stringResource(R.string.the_alphabet),
-                            style = MaterialTheme.typography.headlineMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                        Text(
-                            text = stringResource(R.string.trace_and_learn_all_adlam_letters),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                        Text(
-                            text = stringResource(R.string.th_adl_alp).trimIndent(),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center
-                        )
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(R.string.the_alphabet),
+                                style = MaterialTheme.typography.headlineMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.trace_and_learn_all_adlam_letters),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.th_adl_alp).trimIndent(),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
+                }
+
+                Column(
+                    modifier = Modifier.padding(vertical = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    ActionButton(
+                        navController = navController,
+                        route = "writingUpperCase",
+                        text = stringResource(R.string.upper_case),
+                        icon = Icons.Default.Create
+                    )
+                    ActionButton(
+                        navController = navController,
+                        route = "writingLowerCase",
+                        text = stringResource(R.string.lower_case),
+                        icon = Icons.Default.Edit
+                    )
+                    ActionButton(
+                        navController = navController,
+                        route = "writingNumber",
+                        text = stringResource(R.string.numbers),
+                        icon = Icons.Default.ArrowBack
+                    )
                 }
             }
 
-            Column(
-                modifier = Modifier.padding(vertical = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                ActionButton(
-                    navController = navController,
-                    route = "writingUpperCase",
-                    text = stringResource(R.string.upper_case),
-                    icon = Icons.Default.Create
-                )
-                ActionButton(
-                    navController = navController,
-                    route = "writingLowerCase",
-                    text = stringResource(R.string.lower_case),
-                    icon = Icons.Default.Edit
-                )
-                ActionButton(
-                    navController = navController,
-                    route = "writingNumber",
-                    text = stringResource(R.string.numbers),
-                    icon = Icons.Default.ArrowBack
-                )
-            }
+            // Bannière publicitaire placée en bas
+            BannerAdView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+            )
         }
     }
 }

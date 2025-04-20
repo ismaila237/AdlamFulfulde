@@ -31,7 +31,7 @@
                         "in Pular."</string>
     <string name="the_syllables_complete">THE SYLLABLES\nCOMPLETE and learn all adlam syllables</string>
     <string name="complete_and_learn_all_adlam_syllables">\nCOMPLETE and learn all adlam syllables</string>
-    <string name="wrinting">Wrinting</string>
+    <string name="wrinting" translatable="false">Wrinting</string>
     <string name="reading">Reading</string>
     <string name="current_consonant">Consonant</string>
     <string name="previous">Previous</string>
@@ -56,7 +56,7 @@
     <string name="play_sound">Play Sound</string>
     <string name="correct">Correct!</string>
     <string name="incorrect">Incorrect!</string>
-    <string name="backfffff">Back</string>
+    <string name="backfffff" translatable="false">Back</string>
 
     <string name="letter_details">Letter Details</string>
     <string name="examples">Examples</string>
@@ -99,12 +99,14 @@
     <string name="confirm">Confirm</string>
     <string name="clear">Clear</string>
     <string name="brush_alpha">Brush Alpha</string>
-    <string name="ad_mob_test_banner_id">ca-app-pub-7309731358576813/8916934438</string>
+    <string name="ad_mob_test_banner_id" translatable="false">ca-app-pub-7309731358576813/8916934438</string>
 
-    <string name="ad_mob_banner_id" translatable="false">ca-app-pub-7309731358576813/8598907954</string>
-    <string name="ad_mob_interstitial_id" translatable="false">ca-app-pub-7309731358576813/8580496587</string>
+    <string name="ad_mob_banner_id" translatable="false">ca-app-pub-9267930159061113/8237952518</string>
+    <string name="ad_mob_interstitial_id" translatable="false">ca-app-pub-9267930159061113/7760477778</string>
+
 <!--    <string name="ad_mob_banner_id">ca-app-pub-3940256099942544/6300978111</string>-->
 <!--    <string name="ad_mob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>-->
+
 
     <string name="privacy_policys">Privacy Policy</string>
     <string name="about">About</string>
@@ -119,5 +121,22 @@
     <string name="show_hint">Show hint</string>
     <string name="play_again">Play again</string>
     <string name="share_app">Share app</string>
+
+    <string name="theme">Theme</string>
+    <string name="theme_selection">Theme Selection</string>
+    <string name="theme_default">Default</string>
+    <string name="theme_blue">Blue</string>
+    <string name="theme_green">Green</string>
+    <string name="theme_purple">Purple</string>
+    <string name="theme_orange">Orange</string>
+    <string name="facebook_app_id">1212212121212</string>
+    <string name="references">References</string>
+    <string name="question_number">Question number</string>
+    <string name="discover_the_adlam_alphabet">Discover the Adlam alphabet</string>
+    <string name="practice_adlam_numbers">Practice Adlam numbers</string>
+    <string name="improve_your_writing_skills">Improve your writing skills</string>
+    <string name="test_your_knowledge">Test your knowledge</string>
+
+
 
 </resources>

@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -22,13 +24,34 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.bekisma.adlamfulfulde.R
 import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme
+
+data class Contributor(val name: String)
+data class Reference(val title: String, val url: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(navController: NavController) {
     val context = LocalContext.current
+
+    val contributors = listOf(
+        Contributor("AYSHA SOW"),
+        Contributor("ABOUBAKAR BALLO"),
+        Contributor("ISMAILA HAMADOU")
+    )
+
+    val references = listOf(
+        Reference(
+            title = stringResource(R.string.adlam_by_microsoft),
+            url = "https://unlocked.microsoft.com/adlam-can-an-alphabet-save-a-culture/"
+        ),
+        Reference(
+            title = stringResource(R.string.android_developers_guide),
+            url = "https://developer.android.com/guide"
+        )
+    )
 
     Scaffold(
         topBar = {
@@ -36,7 +59,10 @@ fun AboutScreen(navController: NavController) {
                 title = { Text(stringResource(R.string.about)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -46,24 +72,26 @@ fun AboutScreen(navController: NavController) {
             )
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(16.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = stringResource(R.string.contributors),
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
-            listOf("AYSHA SOW", "ABOUBAKAR BALLO", "ISMAILA HAMADOU").forEach { name ->
+            item {
                 Text(
-                    text = name,
+                    text = stringResource(R.string.contributors),
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+            items(contributors) { contributor ->
+                Text(
+                    text = contributor.name,
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -71,27 +99,25 @@ fun AboutScreen(navController: NavController) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text = "References",
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
+                Text(
+                    text = stringResource(R.string.references),
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
 
-            listOf(
-                stringResource(R.string.adlam_by_microsoft) to "https://unlocked.microsoft.com/adlam-can-an-alphabet-save-a-culture/",
-                stringResource(R.string.android_developers_guide) to "https://developer.android.com/guide"
-            ).forEach { (title, url) ->
+            items(references) { reference ->
                 ReferenceLink(
-                    title = title,
-                    url = url,
+                    title = reference.title,
                     icon = painterResource(id = R.drawable.link_24),
                     onClick = {
-                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(reference.url)))
                     }
                 )
             }
@@ -100,7 +126,7 @@ fun AboutScreen(navController: NavController) {
 }
 
 @Composable
-fun ReferenceLink(title: String, url: String, icon: Painter, onClick: () -> Unit) {
+fun ReferenceLink(title: String, icon: Painter, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -133,27 +159,22 @@ fun ReferenceLink(title: String, url: String, icon: Painter, onClick: () -> Unit
     }
 }
 
-@Preview(
-    name = "Light Mode",
-    showBackground = true
-)
+@Preview(showBackground = true)
 @Composable
-fun AboutScreenLightPreview() {
-    AdlamFulfuldeTheme(useDarkTheme = false) {
-        // Provide a dummy NavController for the preview
-        AboutScreen(navController = NavController(LocalContext.current))
+fun AboutScreenPreview() {
+    AdlamFulfuldeTheme {
+        AboutScreen(navController = rememberNavController())
     }
 }
 
-@Preview(
-    name = "Dark Mode",
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
-)
+@Preview(showBackground = true)
 @Composable
-fun AboutScreenDarkPreview() {
-    AdlamFulfuldeTheme(useDarkTheme = true) {
-        // Provide a dummy NavController for the preview
-        AboutScreen(navController = NavController(LocalContext.current))
+fun ReferenceLinkPreview() {
+    AdlamFulfuldeTheme {
+        ReferenceLink(
+            title = "Exemple de référence",
+            icon = painterResource(id = R.drawable.link_24),
+            onClick = {}
+        )
     }
 }

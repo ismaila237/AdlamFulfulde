@@ -44,10 +44,14 @@ fun AlphabetScreen(navController: NavController) {
         topBar = { AlphabetTopBar(navController) },
         content = { innerPadding ->
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                Column(modifier = Modifier.padding(innerPadding)) {
-                    BannerAdView()
-                    Divider()
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
                     LazyVerticalGrid(
+                        modifier = Modifier.weight(1f),
                         columns = GridCells.Adaptive(minSize = 80.dp),
                         contentPadding = PaddingValues(16.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -58,12 +62,14 @@ fun AlphabetScreen(navController: NavController) {
                             }
                         }
                     )
+
+                    Divider()
+                    BannerAdView()
                 }
             }
         }
     )
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlphabetTopBar(navController: NavController) {

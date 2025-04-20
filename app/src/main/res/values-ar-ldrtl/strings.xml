@@ -8,4 +8,6 @@
     <string name="show_hint">Show hint</string>
     <string name="play_again">Play again</string>
     <string name="share_app">Share app</string>
+    <string name="references">References</string>
+    <string name="question_number">Question number</string>
 </resources>

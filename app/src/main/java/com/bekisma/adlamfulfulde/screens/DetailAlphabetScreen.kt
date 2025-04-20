@@ -114,69 +114,84 @@ fun DetailAlphabetScreen(
     Scaffold(
         topBar = { DetailTopBar(navController, onInfoClick = { showDialog = true }) },
         content = { innerPadding ->
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .background(MaterialTheme.colorScheme.background)
             ) {
-                BannerAdView()
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Box(
+                Column(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .pointerInput(Unit) {
-                            detectHorizontalDragGestures { change, dragAmount ->
-                                change.consume()
-                                when {
-                                    dragAmount > 0 && currentIndex > 0 -> {
-                                        transitionState.targetState = currentIndex - 1
-                                        currentIndex--
+                        .fillMaxSize()
+                        .padding(bottom = 50.dp) // Laisser de l'espace pour la bannière
+                        .align(Alignment.TopCenter),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Contenu principal
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .pointerInput(Unit) {
+                                detectHorizontalDragGestures { change, dragAmount ->
+                                    change.consume()
+                                    when {
+                                        dragAmount > 0 && currentIndex > 0 -> {
+                                            transitionState.targetState = currentIndex - 1
+                                            currentIndex--
+                                        }
+                                        dragAmount < 0 && currentIndex < alphabetList.size - 1 -> {
+                                            transitionState.targetState = currentIndex + 1
+                                            currentIndex++
+                                        }
                                     }
-                                    dragAmount < 0 && currentIndex < alphabetList.size - 1 -> {
-                                        transitionState.targetState = currentIndex + 1
-                                        currentIndex++
-                                    }
+                                    playSoundForLetter(context, alphabetList[currentIndex])
                                 }
-                                playSoundForLetter(context, alphabetList[currentIndex])
+                            }
+                    ) {
+                        AnimatedContent(
+                            targetState = currentIndex,
+                            transitionSpec = {
+                                if (targetState > initialState) {
+                                    slideInHorizontally { width -> width } + fadeIn() with
+                                            slideOutHorizontally { width -> -width } + fadeOut()
+                                } else {
+                                    slideInHorizontally { width -> -width } + fadeIn() with
+                                            slideOutHorizontally { width -> width } + fadeOut()
+                                }.using(SizeTransform(clip = false))
+                            }
+                        ) { targetIndex ->
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                DisplayLetters(alphabetList, targetIndex)
+                                Spacer(modifier = Modifier.height(24.dp))
+                                DisplayExamples(targetIndex, alphabetList)
                             }
                         }
-                ) {
-                    AnimatedContent(
-                        targetState = currentIndex,
-                        transitionSpec = {
-                            if (targetState > initialState) {
-                                slideInHorizontally { width -> width } + fadeIn() with
-                                        slideOutHorizontally { width -> -width } + fadeOut()
-                            } else {
-                                slideInHorizontally { width -> -width } + fadeIn() with
-                                        slideOutHorizontally { width -> width } + fadeOut()
-                            }.using(SizeTransform(clip = false))
-                        }
-                    ) { targetIndex ->
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            DisplayLetters(alphabetList, targetIndex)
-                            Spacer(modifier = Modifier.height(24.dp))
-                            DisplayExamples(targetIndex, alphabetList)
-                        }
                     }
+
+                    NavigationButtons(currentIndex, alphabetList.size) { newIndex ->
+                        transitionState.targetState = newIndex
+                        currentIndex = newIndex
+                        playSoundForLetter(context, alphabetList[currentIndex])
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                NavigationButtons(currentIndex, alphabetList.size) { newIndex ->
-                    transitionState.targetState = newIndex
-                    currentIndex = newIndex
-                    playSoundForLetter(context, alphabetList[currentIndex])
-                }
-                Spacer(modifier = Modifier.height(16.dp))
+                // Bannière publicitaire alignée en bas
+                BannerAdView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                )
             }
         }
     )
+
 
     if (showDialog) {
         ReadingRulesDialog(onDismiss = { showDialog = false })

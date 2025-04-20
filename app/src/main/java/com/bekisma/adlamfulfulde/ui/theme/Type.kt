@@ -1,4 +1,4 @@
-package com.bekisma.adlamfulfulde.ui.theme
+package com.mobiletools.android.claptofind.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
