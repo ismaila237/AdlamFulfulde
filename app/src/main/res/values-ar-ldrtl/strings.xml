@@ -10,4 +10,12 @@
     <string name="share_app">Share app</string>
     <string name="references">References</string>
     <string name="question_number">Question number</string>
+    <string name="hint">Hint</string>
+    <string name="more_options">More options</string>
+    <string name="selected">Selected</string>
+    <string name="developed_by">Developed By</string>
+    <string name="external_link_icon_description">External link description</string>
+    <string name="play_example">Play example</string>
+    <string name="writing_lowercase">Writing Lowercase</string>
+    <string name="writing_numbers">Writing numbers</string>
 </resources>

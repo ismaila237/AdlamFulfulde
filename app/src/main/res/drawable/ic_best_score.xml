@@ -1,0 +1,10 @@
+<!-- res/drawable/ic_best_score.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M17,5V3H7v2H2v6c0,2.97 2.16,5.43 5,5.91V21h10v-4.09c2.84,-0.48 5,-2.94 5,-5.91V5h-5zm-6,14v-4h2v4h-2zm8,-8c0,1.93 -1.57,3.5 -3.5,3.5S12,12.93 12,11s1.57,-3.5 3.5,-3.5S19,9.07 19,11zM5,11c0,1.93 1.57,3.5 3.5,3.5S12,12.93 12,11 10.43,7.5 8.5,7.5 5,9.07 5,11z"/>
+</vector>

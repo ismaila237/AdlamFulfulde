@@ -143,6 +143,14 @@
     <string name="practice_adlam_numbers">تمرن على أرقام أدلام</string>
     <string name="improve_your_writing_skills">حسّن مهاراتك في الكتابة</string>
     <string name="test_your_knowledge">اختبر معلوماتك</string>
+    <string name="hint">Hint</string>
+    <string name="more_options">More options</string>
+    <string name="selected">Selected</string>
+    <string name="developed_by">Developed By</string>
+    <string name="external_link_icon_description">External link description</string>
+    <string name="play_example">Play example</string>
+    <string name="writing_lowercase">Writing Lowercase</string>
+    <string name="writing_numbers">Writing numbers</string>
 
 
 </resources>

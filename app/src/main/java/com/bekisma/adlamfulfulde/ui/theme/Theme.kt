@@ -1,109 +1,75 @@
 package com.bekisma.adlamfulfulde.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography // Ensure Typography is imported or defined
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+// --- ADD Imports for the Enums from their single source of truth ---
+import com.bekisma.adlamfulfulde.ThemeMode
+import com.bekisma.adlamfulfulde.ColorTheme
+// --- End ADD Imports ---
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-)
+import com.bekisma.adlamfulfulde.ColorSchemes
+import com.bekisma.adlamfulfulde.ThemeManager
 
-private val BlueDarkColorScheme = darkColorScheme(
-    primary = Blue80,
-    secondary = BlueGrey80,
-    tertiary = LightBlue80
-)
-
-private val BlueLightColorScheme = lightColorScheme(
-    primary = Blue40,
-    secondary = BlueGrey40,
-    tertiary = LightBlue40
-)
-
-private val GreenDarkColorScheme = darkColorScheme(
-    primary = Green80,
-    secondary = GreenGrey80,
-    tertiary = LightGreen80
-)
-
-private val GreenLightColorScheme = lightColorScheme(
-    primary = Green40,
-    secondary = GreenGrey40,
-    tertiary = LightGreen40
-)
-
-private val OrangeDarkColorScheme = darkColorScheme(
-    primary = Orange80,
-    secondary = OrangeGrey80,
-    tertiary = LightOrange80
-)
-
-private val OrangeLightColorScheme = lightColorScheme(
-    primary = Orange40,
-    secondary = OrangeGrey40,
-    tertiary = LightOrange40
-)
-
-private val RedDarkColorScheme = darkColorScheme(
-    primary = Red80,
-    secondary = RedGrey80,
-    tertiary = LightRed80
-)
-
-private val RedLightColorScheme = lightColorScheme(
-    primary = Red40,
-    secondary = RedGrey40,
-    tertiary = LightRed40
-)
-
-enum class AppTheme {
-    Default, Blue, Green, Orange, Red, Dynamic
-}
 
 @Composable
 fun AdlamFulfuldeTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    appTheme: AppTheme = AppTheme.Default,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when (appTheme) {
-        AppTheme.Default -> if (darkTheme) DarkColorScheme else LightColorScheme
-        AppTheme.Blue -> if (darkTheme) BlueDarkColorScheme else BlueLightColorScheme
-        AppTheme.Green -> if (darkTheme) GreenDarkColorScheme else GreenLightColorScheme
-        AppTheme.Orange -> if (darkTheme) OrangeDarkColorScheme else OrangeLightColorScheme
-        AppTheme.Red -> if (darkTheme) RedDarkColorScheme else RedLightColorScheme
-        AppTheme.Dynamic -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    val context = LocalContext.current
+    // Remember the ThemeManager at the top level of the theme composable
+    val themeManager = remember { ThemeManager(context) }
+
+    // Collect the theme states from DataStore.
+    // These states changing will trigger recomposition of AdlamFulfuldeTheme
+    val themeMode by themeManager.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
+    // Use the imported ColorTheme directly
+    val colorTheme by themeManager.colorTheme.collectAsState(initial = ColorTheme.DEFAULT)
+
+    // Determine if dark theme should be used based on the collected themeMode
+    val shouldUseDarkTheme = when(themeMode) {
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        // --- ADD the else branch here ---
+        else -> isSystemInDarkTheme() // Fallback for unexpected enum values
+        // --- End ADD ---
+    }
+
+    // Select the appropriate color scheme based on the color theme and dark mode
+    val colorScheme = when {
+        shouldUseDarkTheme -> when(colorTheme) {
+            // Use the imported ColorTheme enum constants directly
+            ColorTheme.GREEN -> ColorSchemes.GreenDarkColors
+            ColorTheme.BLUE -> ColorSchemes.BlueDarkColors
+            ColorTheme.PURple -> ColorSchemes.PurpleDarkColors
+            ColorTheme.ORANGE -> ColorSchemes.OrangeDarkColors
+            else -> ColorSchemes.DefaultDarkColors // Default case for color theme
+        }
+        else -> when(colorTheme) {
+            // Use the imported ColorTheme enum constants directly
+            ColorTheme.GREEN -> ColorSchemes.GreenLightColors
+            ColorTheme.BLUE -> ColorSchemes.BlueLightColors
+            ColorTheme.PURPLE -> ColorSchemes.PurpleLightColors
+            ColorTheme.ORANGE -> ColorSchemes.OrangeLightColors
+            else -> ColorSchemes.DefaultLightColors // Default case for color theme
         }
     }
 
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
-    }
-
+    // Apply the selected color scheme using MaterialTheme
     MaterialTheme(
         colorScheme = colorScheme,
-        content = content
+        typography = Typography, // Use the imported Typography or your defined one
+        content = content // Render the rest of the app's UI tree
     )
 }
+
+// Assuming you have a Typography object defined in this package or a related one
+// If not, use the default or define your own like this:
+val Typography = androidx.compose.material3.Typography() // Example default Typography
