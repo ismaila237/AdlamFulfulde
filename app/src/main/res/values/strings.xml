@@ -203,4 +203,34 @@
     <string name="writing_lowercase">Writing Lowercase</string>
     <string name="writing_numbers">Writing numbers</string>
 
+    <string name="vocabulary_title">Vocabulary</string>
+    <string name="vocabulary_module_title">Vocabulary</string>
+    <string name="vocabulary_module_subtitle">Learn common Adlam words</string>
+    <string name="vocabulary_empty">The vocabulary list is currently empty.</string>
+    <string name="vocabulary_detail_title">Word Detail</string>
+    <string name="vocabulary_item_not_found">Word not found.</string>
+    <string name="play_word_sound_desc">Play the word\'s sound</string>
+    <string name="playing_sound">Playing...</string>
+    <string name="play_sound_short">Play</string>
+    <string name="example_sentence_title">Example sentence:</string>
+    <string name="no_audio_available">No audio available</string>
+    <string name="go_back">Go back</string>
+    <string name="remove_from_favorites">remove_from_favorites</string>
+    <string name="add_to_favorites">add_to_favorites</string>
+    <string name="no_search_results">no_search_results</string>
+    <string name="category_other">category_other</string>
+    <string name="scroll_to_top">scroll_to_top</string>
+    <string name="close_search">close_search</string>
+    <string name="search_vocabulary">search_vocabulary</string>
+    <string name="replay_sound">replay_sound</string>
+    <string name="difficulty_label">difficulty_label</string>
+    <string name="reading_passages_empty">reading_passages_empty</string>
+    <string name="reading_passages_title">reading_passages_title</string>
+    <string name="reading_player_title">reading_player_title</string>
+    <string name="reading_passage_not_found">reading_passage_not_found</string>
+
+    <string name="reading_module_title">Guided Reading</string>
+    <string name="reading_module_subtitle">Read texts in Adlam</string>
+
+
 </resources>
