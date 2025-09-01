@@ -1,4 +1,4 @@
-package com.bekisma.adlamfulfulde.screens // Ajuste si nécessaire
+package com.bekisma.adlamfulfulde.screens
 
 import android.content.Context
 import android.content.res.Configuration
@@ -39,112 +39,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.bekisma.adlamfulfulde.R // Assure-toi que c'est le bon chemin pour R
-import com.bekisma.adlamfulfulde.ads.BannerAdView // Assure-toi que ce composant existe
-import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme // Ton thème
+import com.bekisma.adlamfulfulde.R
+import com.bekisma.adlamfulfulde.ads.BannerAdView
+import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme
+import com.bekisma.adlamfulfulde.model.DisplayMode
+import com.bekisma.adlamfulfulde.model.NumberItem
+import com.bekisma.adlamfulfulde.model.QuizState
+import com.bekisma.adlamfulfulde.model.ScreenMode
+import com.bekisma.adlamfulfulde.viewmodel.NumbersViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive // Importation corrigée
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.io.IOException
-import kotlin.random.Random
-
-// --- Data Models ---
-
-/**
- * Modèle de données pour les nombres avec leurs représentations multiples.
- */
-data class NumberItem(
-    val adlamDigit: String,       // Le chiffre Adlam (𞥑)
-    val latinDigit: String,       // Le chiffre Latin (1)
-    val fulfuldeLatin: String,    // Le nom en Fulfulde, écriture latine ("Go'o")
-    val fulfuldeAdlam: String,    // Le nom en Fulfulde, écriture Adlam ("𞤘𞤮𞥋𞤮")
-    val soundId: Int              // Référence audio (R.raw.ad1)
-)
-
-/**
- * Options du mode d'affichage en mode Apprentissage.
- */
-enum class DisplayMode {
-    ADLAM, LATIN, FULFULDE
-}
-
-/**
- * Options du mode de l'écran.
- */
-enum class ScreenMode {
-    LEARNING, QUIZ
-}
-
-// --- Quiz Related Data Models ---
-
-data class QuizQuestion(
-    val questionText: String,
-    val options: List<String>,
-    val correctAnswer: String,
-    val questionType: QuestionType
-)
-
-enum class QuestionType {
-    ADLAM_TO_FULFULDE, // Montre Chiffre Adlam, demande Nom Fulfulde (en Adlam)
-    LATIN_TO_FULFULDE, // Montre Chiffre Latin, demande Nom Fulfulde (en Adlam)
-    FULFULDE_TO_ADLAM  // Montre Nom Fulfulde (en Adlam), demande Chiffre Adlam
-}
-
-data class QuizState(
-    val questions: List<QuizQuestion>,
-    val currentQuestionIndex: Int = 0,
-    val score: Int = 0,
-    val lastAnswerWasCorrect: Boolean? = null,
-    val showFeedback: Boolean = false
-)
 
 // --- Main Screen Composable ---
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NumbersScreen(navController: NavController) {
-    // Initialize resources and state
+fun NumbersScreen(navController: NavController, viewModel: NumbersViewModel = viewModel()) {
     val context = LocalContext.current
-    val mediaPlayer = remember { MediaPlayer() }
-    val coroutineScope = rememberCoroutineScope()
     val hapticFeedback = LocalHapticFeedback.current
 
-    // State variables
-    var currentMode by remember { mutableStateOf(ScreenMode.LEARNING) }
-    var displayMode by remember { mutableStateOf(DisplayMode.ADLAM) }
-    var currentNumberIndex by remember { mutableStateOf(0) }
-    var isPlaying by remember { mutableStateOf(false) }
-    var autoPlaySpeed by remember { mutableStateOf(1.5f) }
-    var showInfoDialog by remember { mutableStateOf(false) }
-
-    // Quiz state
-    var quizState by remember { mutableStateOf<QuizState?>(null) }
-    var showQuizResultDialog by remember { mutableStateOf(false) }
-
-    // Charger les données (maintenant avec fulfuldeAdlam rempli)
-    val numberItems = getNumberItems()
-
-    // MediaPlayer cleanup
-    DisposableEffect(Unit) {
-        onDispose {
-            mediaPlayer.release()
-        }
-    }
-
-    // Initialize or reset quiz state when mode changes
-    LaunchedEffect(currentMode, numberItems) {
-        if (currentMode == ScreenMode.QUIZ && quizState == null) {
-            quizState = generateQuiz(numberItems)
-        } else if (currentMode == ScreenMode.LEARNING) {
-            quizState = null
-            showQuizResultDialog = false
-            if (isPlaying) isPlaying = false
-        }
-    }
+    val currentMode by viewModel.currentMode.collectAsState()
+    val displayMode by viewModel.displayMode.collectAsState()
+    val currentNumberIndex by viewModel.currentNumberIndex.collectAsState()
+    val isPlaying by viewModel.isPlaying.collectAsState()
+    val autoPlaySpeed by viewModel.autoPlaySpeed.collectAsState()
+    val showInfoDialog by viewModel.showInfoDialog.collectAsState()
+    val quizState by viewModel.quizState.collectAsState()
+    val showQuizResultDialog by viewModel.showQuizResultDialog.collectAsState()
 
     // Show info dialog
     if (showInfoDialog) {
-        InfoDialog(onDismiss = { showInfoDialog = false })
+        InfoDialog(onDismiss = { viewModel.showInfoDialog(false) })
     }
 
     Scaffold(
@@ -152,19 +79,14 @@ fun NumbersScreen(navController: NavController) {
             NumbersTopAppBar(
                 navController = navController,
                 currentMode = currentMode,
-                onToggleMode = {
-                    currentMode = if (currentMode == ScreenMode.LEARNING) ScreenMode.QUIZ else ScreenMode.LEARNING
-                },
+                onToggleMode = { viewModel.toggleMode() },
                 isPlaying = isPlaying,
-                onPlayPauseClick = {
-                    if (!isPlaying) hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                    isPlaying = !isPlaying
-                },
+                onPlayPauseClick = { viewModel.togglePlayPause(context) },
                 displayMode = displayMode,
-                onDisplayModeChanged = { displayMode = it },
+                onDisplayModeChanged = { viewModel.setDisplayMode(it) },
                 autoPlaySpeed = autoPlaySpeed,
-                onSpeedChanged = { autoPlaySpeed = it },
-                onInfoClick = { showInfoDialog = true },
+                onSpeedChanged = { viewModel.setAutoPlaySpeed(it) },
+                onInfoClick = { viewModel.showInfoDialog(true) },
                 isPlayPauseEnabled = currentMode == ScreenMode.LEARNING,
                 isSpeedControlEnabled = currentMode == ScreenMode.LEARNING,
                 isDisplayModeEnabled = currentMode == ScreenMode.LEARNING
@@ -173,16 +95,14 @@ fun NumbersScreen(navController: NavController) {
         content = { innerPadding ->
             when (currentMode) {
                 ScreenMode.LEARNING -> LearningContent(
-                    numberItems = numberItems,
+                    numberItems = viewModel.numberItems,
                     currentNumberIndex = currentNumberIndex,
                     isPlaying = isPlaying,
                     displayMode = displayMode,
                     innerPadding = innerPadding,
                     onItemClick = { index ->
-                        if (isPlaying) isPlaying = false
                         hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                        currentNumberIndex = index
-                        playSound(context, numberItems[index].soundId, mediaPlayer)
+                        viewModel.selectNumber(index, context)
                     }
                 )
                 ScreenMode.QUIZ -> quizState?.let { state ->
@@ -190,28 +110,11 @@ fun NumbersScreen(navController: NavController) {
                         quizState = state,
                         innerPadding = innerPadding,
                         onAnswerSelected = { selectedOption ->
-                            val currentQuestion = state.questions[state.currentQuestionIndex]
-                            val isCorrect = selectedOption == currentQuestion.correctAnswer
-                            val nextIndex = state.currentQuestionIndex + 1
-
-                            quizState = state.copy(
-                                score = if (isCorrect) state.score + 1 else state.score,
-                                currentQuestionIndex = nextIndex,
-                                lastAnswerWasCorrect = isCorrect,
-                                showFeedback = true
-                            )
-                            // Optional: Play correct/incorrect sound
-                            if (nextIndex >= state.questions.size) {
-                                showQuizResultDialog = true
-                            }
+                            viewModel.onAnswerSelected(selectedOption)
                         },
-                        onNextQuestion = {
-                            if (quizState != null && quizState!!.currentQuestionIndex < quizState!!.questions.size) {
-                                quizState = quizState?.copy(showFeedback = false)
-                            }
-                        }
+                        onNextQuestion = { viewModel.onNextQuestion() }
                     )
-                } ?: Box( // Loading indicator
+                } ?: Box(
                     modifier = Modifier.fillMaxSize().padding(innerPadding),
                     contentAlignment = Alignment.Center
                 ) { CircularProgressIndicator() }
@@ -224,12 +127,11 @@ fun NumbersScreen(navController: NavController) {
         AutoPlayHandler(
             isPlaying = isPlaying,
             currentNumberIndex = currentNumberIndex,
-            numberItems = numberItems,
-            mediaPlayer = mediaPlayer,
+            numberItems = viewModel.numberItems,
             context = context,
             autoPlaySpeed = autoPlaySpeed,
-            updateIndex = { currentNumberIndex = it },
-            playSoundFn = { item -> playSound(context, item.soundId, mediaPlayer) }
+            updateIndex = { viewModel.selectNumber(it, context) },
+            playSoundFn = { item -> /* Handled by selectNumber */ }
         )
     }
 
@@ -238,50 +140,10 @@ fun NumbersScreen(navController: NavController) {
         QuizResultDialog(
             score = quizState!!.score,
             totalQuestions = quizState!!.questions.size,
-            onDismiss = {
-                showQuizResultDialog = false
-                currentMode = ScreenMode.LEARNING
-                quizState = null
-            },
-            onPlayAgain = {
-                showQuizResultDialog = false
-                quizState = generateQuiz(numberItems)
-            }
+            onDismiss = { viewModel.dismissQuizResult() },
+            onPlayAgain = { viewModel.playAgainQuiz() }
         )
     }
-}
-
-// --- Data Provider ---
-
-/**
- * Retourne la liste des items numériques (0-19) avec transcriptions Adlam.
- * !!! Il est fortement recommandé de faire vérifier les transcriptions 'fulfuldeAdlam' !!!
- */
-@Composable
-private fun getNumberItems(): List<NumberItem> {
-    // Transcriptions Adlam pour les noms Fulfulde (Vérification recommandée)
-    return listOf(
-        NumberItem("𞥐", "0", "Sifir", "𞤅𞤭𞤬𞤭𞤪", R.raw.ad0),             // Sifir
-        NumberItem("𞥑", "1", "Go'o", "𞤘𞤮𞥋𞤮", R.raw.ad1),               // Go'o
-        NumberItem("𞥒", "2", "Ɗiɗi", "𞤁𞤭𞤯𞤭", R.raw.ad2),               // Ɗiɗi
-        NumberItem("𞥓", "3", "Tati", "𞤚𞤢𞤼𞤭", R.raw.ad3),               // Tati
-        NumberItem("𞥔", "4", "Nayi", "𞤐𞤢𞤴𞤭", R.raw.ad4),               // Nayi
-        NumberItem("𞥕", "5", "Jowi", "𞤔𞤮𞤱𞤭", R.raw.ad5),               // Jowi
-        NumberItem("𞥖", "6", "Jeegom", "𞤔𞤫𞥅𞤺𞤮𞤥", R.raw.ad6),           // Jeegom (long ee)
-        NumberItem("𞥗", "7", "Jeeɗiɗi", "𞤔𞤫𞥅𞤯𞤭𞤯𞤭", R.raw.ad7),         // Jeeɗiɗi (long ee, ɗ)
-        NumberItem("𞥘", "8", "Jeetati", "𞤔𞤫𞥅𞤼𞤢𞤼𞤭", R.raw.ad8),         // Jeetati (long ee)
-        NumberItem("𞥙", "9", "Jeenayi", "𞤔𞤫𞥅𞤲𞤢𞤴𞤭", R.raw.ad9),         // Jeenayi (long ee)
-        NumberItem("𞥑𞥐", "10", "Sappo", "𞤅𞤢𞤨𞥆𞤮", R.raw.ad0),           // Sappo (gemination pp)
-        NumberItem("𞥑𞥑", "11", "Sappo e go'o", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤘𞤮𞥋𞤮", R.raw.ad1), // Sappo e go'o
-        NumberItem("𞥑𞥒", "12", "Sappo e ɗiɗi", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤁𞤭𞤯𞤭", R.raw.ad2), // Sappo e ɗiɗi
-        NumberItem("𞥑𞥓", "13", "Sappo e tati", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤚𞤢𞤼𞤭", R.raw.ad3), // Sappo e tati
-        NumberItem("𞥑𞥔", "14", "Sappo e nayi", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤐𞤢𞤴𞤭", R.raw.ad4), // Sappo e nayi
-        NumberItem("𞥑𞥕", "15", "Sappo e jowi", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤔𞤮𞤱𞤭", R.raw.ad5), // Sappo e jowi
-        NumberItem("𞥑𞥖", "16", "Sappo e jeegom", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤔𞤫𞥅𞤺𞤮𞤥", R.raw.ad6), // Sappo e jeegom
-        NumberItem("𞥑𞥗", "17", "Sappo e jeeɗiɗi", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤔𞤫𞥅𞤯𞤭𞤯𞤭", R.raw.ad7), // Sappo e jeeɗiɗi
-        NumberItem("𞥑𞥘", "18", "Sappo e jeetati", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤔𞤫𞥅𞤼𞤢𞤼𞤭", R.raw.ad8), // Sappo e jeetati
-        NumberItem("𞥑𞥙", "19", "Sappo e jeenayi", "𞤅𞤢𞤨𞥆𞤮 𞤫 𞤔𞤫𞥅𞤲𞤢𞤴𞤭", R.raw.ad9) // Sappo e jeenayi
-    )
 }
 
 // --- Learning Mode Content ---
@@ -304,7 +166,7 @@ fun LearningContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 56.dp), // Assume banner height
+                .padding(bottom = 56.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AnimatedCurrentNumber(
@@ -334,72 +196,6 @@ fun LearningContent(
 
 // --- Quiz Mode Content ---
 
-/**
- * Génère les questions du quiz en utilisant les transcriptions Adlam.
- */
-fun generateQuiz(items: List<NumberItem>, numberOfQuestions: Int = 10): QuizState {
-    val questions = mutableListOf<QuizQuestion>()
-    if (items.isEmpty()) return QuizState(emptyList())
-
-    val availableItems = items.shuffled()
-    val numQuestions = minOf(numberOfQuestions, availableItems.size)
-
-    repeat(numQuestions) { index ->
-        val correctItem = availableItems[index]
-        val potentialDistractors = availableItems.filter { it != correctItem }
-        if (potentialDistractors.size < 3) {
-            Log.w("QuizGen", "Not enough unique items for 3 distractors for item: ${correctItem.latinDigit}")
-        }
-        val distractors = potentialDistractors.shuffled().take(3)
-        // Vérifier si on a assez de distracteurs pour former 4 options
-        if (distractors.size < 3) {
-            Log.w("QuizGen", "Skipping question for ${correctItem.latinDigit} due to lack of distractors.")
-            // Ou utiliser moins d'options ? Pour l'instant, on saute.
-            return@repeat // Passe à l'itération suivante de repeat
-        }
-
-
-        val questionType = QuestionType.values().random()
-        val questionText: String
-        val correctAnswer: String
-        val options: List<String>
-
-        try {
-            when (questionType) {
-                QuestionType.ADLAM_TO_FULFULDE -> {
-                    questionText = "Comment s'écrit '${correctItem.adlamDigit}' en Fulfulde (Adlam) ?"
-                    correctAnswer = correctItem.fulfuldeAdlam
-                    options = (distractors.map { it.fulfuldeAdlam } + correctAnswer).shuffled()
-                }
-                QuestionType.LATIN_TO_FULFULDE -> {
-                    questionText = "Comment s'écrit '${correctItem.latinDigit}' en Fulfulde (Adlam) ?"
-                    correctAnswer = correctItem.fulfuldeAdlam
-                    options = (distractors.map { it.fulfuldeAdlam } + correctAnswer).shuffled()
-                }
-                QuestionType.FULFULDE_TO_ADLAM -> {
-                    questionText = "Quel chiffre Adlam correspond à '${correctItem.fulfuldeAdlam}' ?"
-                    correctAnswer = correctItem.adlamDigit
-                    options = (distractors.map { it.adlamDigit } + correctAnswer).shuffled()
-                }
-            }
-            if (options.isNotEmpty() && options.size > 1) {
-                questions.add(QuizQuestion(questionText, options, correctAnswer, questionType))
-            } else {
-                Log.w("QuizGen", "Could not generate valid options for item: ${correctItem.latinDigit}")
-            }
-        } catch (e: Exception) {
-            Log.e("QuizGen", "Error generating question for item ${correctItem.latinDigit}", e)
-        }
-    }
-    // S'assurer qu'on a bien généré des questions
-    if (questions.isEmpty() && items.isNotEmpty()){
-        Log.e("QuizGen", "Failed to generate any quiz questions!")
-        // Retourner un état vide ou avec un message d'erreur ?
-    }
-    return QuizState(questions = questions)
-}
-
-
 @Composable
 fun QuizContent(
     quizState: QuizState,
@@ -407,7 +203,6 @@ fun QuizContent(
     onAnswerSelected: (String) -> Unit,
     onNextQuestion: () -> Unit
 ) {
-    // Gérer le cas où il n'y a pas de questions
     if (quizState.questions.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
@@ -422,7 +217,6 @@ fun QuizContent(
         return
     }
 
-    // Si le quiz est terminé (index >= taille)
     if (quizState.currentQuestionIndex >= quizState.questions.size) {
         Box(
             modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
@@ -448,7 +242,6 @@ fun QuizContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top)
     ) {
-        // Progress and Score
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -464,17 +257,14 @@ fun QuizContent(
         }
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Question Text (Assurez-vous que la police Adlam est appliquée si nécessaire via le thème)
         Text(
             text = currentQuestion.questionText,
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
-            // fontFamily = adlamFontFamily // Appliquer explicitement si besoin
         )
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Answer Options
         currentQuestion.options.forEach { option ->
             val isCorrectAnswer = option == currentQuestion.correctAnswer
             val isSelected = option == selectedOption
@@ -496,16 +286,13 @@ fun QuizContent(
                 colors = buttonColors,
                 enabled = !quizState.showFeedback || isSelected || isCorrectAnswer
             ) {
-                // Assurez-vous que la police Adlam est appliquée si nécessaire via le thème
                 Text(
                     text = option, fontSize = 18.sp, textAlign = TextAlign.Center
-                    // fontFamily = adlamFontFamily // Appliquer explicitement si besoin
                 )
             }
         }
         Spacer(modifier = Modifier.weight(1f))
 
-        // Feedback Text and Next Button
         AnimatedVisibility(visible = quizState.showFeedback) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 val feedbackText = if (quizState.lastAnswerWasCorrect == true) "Correct !" else "Incorrect."
@@ -521,7 +308,6 @@ fun QuizContent(
         }
     }
 }
-
 
 @Composable
 fun QuizResultDialog(
@@ -543,7 +329,6 @@ fun QuizResultDialog(
         dismissButton = { TextButton(onClick = onDismiss) { Text("Retour") } }
     )
 }
-
 
 // --- Top App Bar and Controls ---
 
@@ -696,12 +481,12 @@ fun AnimatedCurrentNumber(currentItem: NumberItem, displayMode: DisplayMode, mod
     Box(modifier = modifier.shadow(4.dp, RoundedCornerShape(16.dp)).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(16.dp), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.fillMaxHeight()) {
             AnimatedContent(targetState = currentText, transitionSpec = { (slideInVertically { h -> h } + fadeIn()) togetherWith (slideOutVertically { h -> -h } + fadeOut()) using SizeTransform(clip = false) }) { text ->
-                Text(text, fontSize = fontSize, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center, maxLines = 2, softWrap = true) // fontFamily = ...
+                Text(text, fontSize = fontSize, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center, maxLines = 2, softWrap = true)
             }
             AnimatedVisibility(visible = showSecondaryText) {
                 Column {
                     Spacer(Modifier.height(8.dp))
-                    Text(secondaryText, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center) // fontFamily = ...
+                    Text(secondaryText, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center)
                 }
             }
         }
@@ -734,11 +519,11 @@ fun NumberCard(item: NumberItem, isCurrent: Boolean, isAutoPlaying: Boolean, dis
                 val showHint = hintText.isNotBlank()
                 val fontSize = when { displayMode == DisplayMode.FULFULDE && cardText.length > 8 -> 16.sp; displayMode == DisplayMode.FULFULDE -> 20.sp; (displayMode == DisplayMode.ADLAM || displayMode == DisplayMode.LATIN) && cardText.length > 2 -> 30.sp; else -> 36.sp }
 
-                Text(cardText, fontSize = fontSize, fontWeight = FontWeight.Bold, color = textColor, textAlign = TextAlign.Center, maxLines = 2, softWrap = true) // fontFamily = ...
+                Text(cardText, fontSize = fontSize, fontWeight = FontWeight.Bold, color = textColor, textAlign = TextAlign.Center, maxLines = 2, softWrap = true)
                 AnimatedVisibility(visible = showHint) {
                     Column {
                         Spacer(Modifier.height(4.dp))
-                        Text(hintText, fontSize = 12.sp, color = textColor.copy(alpha = 0.7f), textAlign = TextAlign.Center) // fontFamily = ...
+                        Text(hintText, fontSize = 12.sp, color = textColor.copy(alpha = 0.7f), textAlign = TextAlign.Center)
                     }
                 }
             }
@@ -757,28 +542,6 @@ fun animatePulseEffect(isActive: Boolean): Float {
 // --- Audio Playback and Autoplay ---
 
 /**
- * Joue une ressource audio avec gestion d'erreurs robuste.
- */
-fun playSound(context: Context, soundId: Int, mediaPlayer: MediaPlayer) {
-    if (soundId == 0) { Log.w("playSound", "Invalid soundId (0), skipping."); return }
-    val uriString = "android.resource://${context.packageName}/$soundId"
-    val uri = Uri.parse(uriString)
-    try {
-        if (mediaPlayer.isPlaying) mediaPlayer.stop()
-        mediaPlayer.reset()
-        mediaPlayer.setDataSource(context, uri)
-        mediaPlayer.setOnPreparedListener { mp -> try { mp.start() } catch (ise: IllegalStateException) { Log.e("MediaPlayer", "Error starting $uriString", ise); try { mp.reset() } catch (re: Exception) { Log.e("MediaPlayer", "Reset failed", re) } } }
-        mediaPlayer.setOnCompletionListener { mp -> /* Optional: mp.reset()? */ }
-        mediaPlayer.setOnErrorListener { mp, what, extra -> Log.e("MediaPlayer", "Error (what=$what, extra=$extra) for $uriString"); try { mp.reset() } catch (re: Exception) { Log.e("MediaPlayer", "Reset failed", re) }; true }
-        mediaPlayer.prepareAsync()
-    } catch (e: Exception) { // Catch IOException, IllegalStateException, etc.
-        Log.e("MediaPlayer", "Error setting up sound $uriString", e)
-        try { mediaPlayer.reset() } catch (re: Exception) { Log.e("MediaPlayer", "Reset failed", re) }
-    }
-}
-
-
-/**
  * Gère la lecture automatique en mode Apprentissage.
  */
 @Composable
@@ -786,7 +549,6 @@ fun AutoPlayHandler(
     isPlaying: Boolean,
     currentNumberIndex: Int,
     numberItems: List<NumberItem>,
-    mediaPlayer: MediaPlayer,
     context: Context,
     autoPlaySpeed: Float,
     updateIndex: (Int) -> Unit,
@@ -811,8 +573,7 @@ fun AutoPlayHandler(
                 }
             }
         } else {
-            try { if (mediaPlayer.isPlaying) mediaPlayer.stop(); mediaPlayer.reset() }
-            catch (e: Exception) { Log.w("AutoPlayHandler", "MediaPlayer state error during stop/reset: ${e.message}") }
+            // No longer need to stop/reset MediaPlayer here as it's managed by ViewModel
         }
     }
 }
@@ -832,11 +593,12 @@ fun PreviewNumbersScreenLearning() {
 fun PreviewNumbersScreenQuiz() {
     val navController = rememberNavController()
     AdlamFulfuldeTheme {
-        val sampleItems = getNumberItems().take(4) // Use actual data source for preview consistency
-        val previewQuizState = generateQuiz(sampleItems, 4)
+        // For preview, we can provide a dummy ViewModel or mock its dependencies
+        val dummyViewModel = NumbersViewModel() // Using default constructor for simplicity in preview
         Scaffold( topBar = { /* Mock TopAppBar if needed */ } ) { padding ->
-            if (previewQuizState.questions.isNotEmpty()) {
-                QuizContent(previewQuizState.copy(showFeedback = false), padding, {}, {})
+            val quizState by dummyViewModel.quizState.collectAsState()
+            if (quizState != null && quizState!!.questions.isNotEmpty()) {
+                QuizContent(quizState!!.copy(showFeedback = false), padding, {}, {})
             } else {
                 Box(Modifier.fillMaxSize().padding(padding), Alignment.Center){ Text("Could not generate quiz preview.")}
             }

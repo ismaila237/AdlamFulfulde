@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.0"
+agp = "8.6.0"
 animation = "1.8.0"
 audienceNetworkSdk = "6.12.0"
 facebook = "6.13.7.0"

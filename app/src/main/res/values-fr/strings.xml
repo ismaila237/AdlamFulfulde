@@ -1,114 +1,79 @@
 <resources>
-    <!-- Nom de l'application -->
+    <string name="Exercises">Exercices</string>
     <string name="app_name">Adlam</string>
-
-    <!-- Menu -->
-    <string name="menu">Menu</string>
-
-    <!-- Titres des écrans -->
-    <string name="welcome_screen">Écran de bienvenue</string>
-    <string name="exercise_sessions">Sessions d\'exercice</string>
-    <string name="exercise_session_detail">Détails de la session d\'exercice</string>
-    <string name="sleep_sessions">Sessions de sommeil</string>
-    <string name="sleep_session_detail">Détails de la session de sommeil</string>
-    <string name="differential_changes">Changements différentiels</string>
-    <string name="privacy_policy">Politique de confidentialité</string>
-    <string name="input_readings">Enregistrer le poids</string>
-
-    <!-- Modules d'apprentissage -->
+    <string name="menu">menu</string>
+    <string name="welcome_screen">Welcome screen</string>
+    <string name="exercise_sessions">Exercise sessions</string>
+    <string name="exercise_session_detail">Exercise session detail</string>
+    <string name="sleep_sessions">Sleep sessions</string>
+    <string name="sleep_session_detail">Sleep session detail</string>
+    <string name="differential_changes">Changes</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="input_readings">Record weight</string>
     <string name="alphabet">Alphabet</string>
-    <string name="alphabet_learning">Apprentissage de l\'alphabet</string>
-    <string name="numbers">Nombres</string>
+    <string name="writing">Writing</string>
+    <string name="alphabet_learning">Alphabet</string>
+    <string name="numbers">Numbers</string>
     <string name="quiz">Quiz</string>
-    <string name="the_syllables">Les syllabes</string>
-    <string name="learn_to_write">Apprendre à écrire</string>
-    <string name="vocabulary">Vocabulaire</string>
-    <string name="start">Commencer</string>
-
-    <string name="the_syllables_complete">Les syllabes complètes</string>
-    <string name="complete_and_learn_all_adlam_syllables">Complétez et apprenez toutes les syllabes Adlam</string>
-    <string name="writing">Écriture</string>
-    <string name="reading">Lecture</string>
-    <string name="current_consonant">Consonne actuelle</string>
-    <string name="previous">Précédent</string>
-    <string name="next">Suivant</string>
-    <string name="back">Retour</string>
-    <string name="consonne">Consonne : %1$s</string>
-    <string name="the_alphabet">L\'alphabet</string>
-    <string name="trace_and_learn_all_adlam_letters">Tracez et apprenez toutes les lettres Adlam</string>
-    <string name="lower_case">Minuscule</string>
-    <string name="upper_case">Majuscule</string>
-    <string name="setting">Paramètre</string>
-    <string name="learn_alphabet">Apprendre l\'alphabet</string>
-
-    <!-- Instructions du quiz -->
-    <string name="quiz_instructions_title">Instructions du quiz</string>
-    <string name="quiz_instructions_text">Vous entendrez un son représentant une lettre Adlam. Sélectionnez la lettre correspondante parmi les options proposées.</string>
-    <string name="quiz_title">Quiz - Reconnaître la lettre</string>
-    <string name="quiz_completed">Quiz terminé !</string>
-    <string name="final_score">Score final : %1$d/%2$d</string>
-    <string name="replay">Rejouer</string>
-    <string name="return_to_home">Retour à l\'accueil</string>
-    <string name="score">Score : %1$d</string>
-    <string name="question">Question : %1$d</string>
-    <string name="play_sound">Jouer le son</string>
-    <string name="correct">Correct !</string>
-    <string name="incorrect">Incorrect !</string>
-
-    <!-- Divers -->
-    <string name="letter_details">Détails de la lettre</string>
-    <string name="examples">Exemples</string>
-    <string name="numbers_in_adlam">Nombres en Adlam</string>
-    <string name="pause">Pause</string>
-    <string name="play">Lecture</string>
-    <string name="stop">Arrêter</string>
-    <string name="settings">Paramètres</string>
-    <string name="adlam_letter">Lettre Adlam</string>
-
-    <!-- Paramètres du pinceau -->
-    <string name="brush_settings_title">Paramètres du pinceau</string>
-    <string name="brush_size">Taille du pinceau : %1$d px</string>
-    <string name="brush_color">Couleur du pinceau</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Annuler</string>
-    <string name="info">Info</string>
-
-    <!-- Règles de lecture -->
-    <string name="reading_rules_title">Règles de lecture</string>
-
-
-
-    <!-- Annuler, refaire et autres actions -->
-    <string name="undo">Annuler</string>
-    <string name="redo">Refaire</string>
-    <string name="save">Enregistrer</string>
-    <string name="share">Partager</string>
-    <string name="confirm">Confirmer</string>
-    <string name="clear">Effacer</string>
-    <string name="brush_alpha">Opacité du pinceau</string>
-
-
-
-    <!-- Divers titres et étiquettes -->
-    <string name="about">À propos</string>
-    <string name="adlam_by_microsoft">Adlam par Microsoft</string>
-    <string name="android_developers_guide">Guide des développeurs Android</string>
-    <string name="select_difficulty">Sélectionnez la difficulté</string>
-    <string name="beginner">Débutant</string>
-    <string name="intermediate">Intermédiaire</string>
-    <string name="advanced">Avancé</string>
-    <string name="best_score">Meilleur score</string>
-    <string name="remaining_time">Temps restant</string>
-<!--    haha-->
+    <string name="the_syllables">The syllables</string>
+    <string name="learn_to_write">Learn to write</string>
+    <string name="vocabulary">Vocabulary</string>
+    <string name="start">Start</string>
     <string name="when_a_vowel_is_combined">"\n                When a vowel is combined with a consonant, \n                we get a syllable or “Sigande,” in Pular.\n                Let’s start by learning how syllables \n                are created. \n                After that, complete the missing \n                letters to create the syllables. \n                Then trace the letters again \n                to practice.\n            "</string>
-
     <string name="th_adl_alp">"The Adlam alphabet consists of 28 letters. \n" +
                         "There are five vowels called Mase and \n" +
                         "23 consonants called Yhiye. \n" +
                         "They play the same role in English as \n" +
                         "in Pular."</string>
+    <string name="the_syllables_complete">THE SYLLABLES\nCOMPLETE and learn all adlam syllables</string>
+    <string name="complete_and_learn_all_adlam_syllables">\nCOMPLETE and learn all adlam syllables</string>
+    <string name="reading">Reading</string>
+    <string name="current_consonant">Consonant</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="consonne">Consonne: %1$s</string>
+    <string name="the_alphabet">THE ALPHABET</string>
+    <string name="trace_and_learn_all_adlam_letters">Trace and learn all adlam letters</string>
+    <string name="lower_case">Lower Case</string>
+    <string name="upper_case">Upper Case</string>
+    <string name="setting">Setting</string>
+    <string name="learn_alphabet">Learn Alphabet</string>
+    <string name="quiz_instructions_title">Quiz Instructions</string>
+    <string name="quiz_instructions_text">You will hear a sound representing an Adlam letter. Select the corresponding letter from the options provided.</string>
+    <string name="quiz_title">Quiz - Recognize the Letter</string>
+    <string name="quiz_completed">Quiz Completed!</string>
+    <string name="final_score">Final Score: %1$d/%2$d</string>
+    <string name="replay">Replay</string>
+    <string name="return_to_home">Return to Home</string>
+    <string name="score">Score: %1$d</string>
+    <string name="question">Question: %1$d</string>
+    <string name="play_sound">Play Sound</string>
+    <string name="correct">Correct!</string>
+    <string name="incorrect">Incorrect!</string>
+    <string name="letter_details">Letter Details</string>
+    <string name="examples">Examples</string>
+    <string name="numbers_in_adlam">Numbers in Adlam</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="settings">Settings</string>
+    <string name="adlam_letter">Adlam Letter</string>
+    <string name="brush_settings_title">Brush Settings</string>
+    <string name="brush_size">Brush Size: %1$d px</string>
+    <string name="brush_color">Brush Color</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="info">Info</string>
+    <string name="reading_rules_title">Reading Rules</string>
+    <string name="select_difficulty">Select Difficulty</string>
+    <string name="beginner">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="advanced">Advanced</string>
+    <string name="best_score">Best score</string>
+    <string name="remaining_time">Remaining time</string>
     <string name="reading_rules_text">
-        <![CDATA[
+        
         ADLaM Reading Rules:
 
         1. ADLaM script is written from right to left.
@@ -117,51 +82,111 @@
         4. Long vowels are indicated using diacritics.
         5. Punctuation includes initial and final forms of question and exclamation marks.
         6. Hyphens are used for word breaks; parentheses and double parentheses for grouping.
-        ]]>
+        
     </string>
-    <string name="contributors">Contributeurs</string>
-    <string name="show_adlam">Afficher Adlam</string>
-    <string name="show_latin">Afficher Latin</string>
-    <string name="hide_guide">Masquer le guide</string>
-    <string name="show_guide">Afficher le guide</string>
-    <string name="writing_uppercase">Écrire en majuscules</string>
-    <string name="show_hint">Afficher l\'indice</string>
-    <string name="play_again">Rejouer</string>
-    <string name="share_app">Partager l\'application</string>
-
-    <string name="theme">Thème</string>
-    <string name="theme_selection">Sélection du thème</string>
-    <string name="theme_default">Par défaut</string>
-    <string name="theme_blue">Bleu</string>
-    <string name="theme_green">Vert</string>
-    <string name="theme_purple">Violet</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="save">Save</string>
+    <string name="share">Share</string>
+    <string name="confirm">Confirm</string>
+    <string name="clear">Clear</string>
+    <string name="brush_alpha">Brush Alpha</string>
+    <string name="privacy_policys">Privacy Policy</string>
+    <string name="about">About</string>
+    <string name="adlam_by_microsoft">Adlam by Microsoft</string>
+    <string name="android_developers_guide">Android Developers Guide</string>
+    <string name="contributors">Contributors</string>
+    <string name="show_adlam">Show Adlam</string>
+    <string name="show_latin">Show Latin</string>
+    <string name="hide_guide">Hide guide</string>
+    <string name="show_guide">Show guide</string>
+    <string name="writing_uppercase">Writing uppercase</string>
+    <string name="show_hint">Show hint</string>
+    <string name="play_again">Play again</string>
+    <string name="share_app">Share app</string>
+    <string name="theme">Theme</string>
+    <string name="theme_selection">Theme Selection</string>
+    <string name="theme_default">Default</string>
+    <string name="theme_blue">Blue</string>
+    <string name="theme_green">Green</string>
+    <string name="theme_purple">Purple</string>
     <string name="theme_orange">Orange</string>
     <string name="references">References</string>
     <string name="question_number">Question number</string>
-    <string name="discover_the_adlam_alphabet">Découvrez l\'alphabet Adlam</string>
-    <string name="practice_adlam_numbers">Pratiquez les chiffres Adlam</string>
-    <string name="improve_your_writing_skills">Améliorez vos compétences en écriture</string>
-    <string name="test_your_knowledge">Testez vos connaissances</string>
+    <string name="discover_the_adlam_alphabet">Discover the Adlam alphabet</string>
+    <string name="practice_adlam_numbers">Practice Adlam numbers</string>
+    <string name="improve_your_writing_skills">Improve your writing skills</string>
+    <string name="test_your_knowledge">Test your knowledge</string>
     <string name="hint">Hint</string>
+    <string name="appearance">Apparence</string>
+    <string name="theme_mode">Mode thème</string>
+    <string name="system_default">Par défaut du système</string>
+    <string name="light">Clair</string>
+    <string name="dark">Sombre</string>
+    <string name="color_theme">Thème de couleur</string>
+    <string name="default_theme">Par défaut</string>
+    <string name="green">Vert</string>
+    <string name="blue">Bleu</string>
+    <string name="purple">Violet</string>
+    <string name="orange">Orange</string>
+    <string name="about_app">À propos de l\'application</string>
+    <string name="select_theme">Sélectionner un thème</string>
+    <string name="select_color_theme">Sélectionner un thème de couleur</string>
+    <string name="close">Fermer</string>
+    <string name="learn_adlam_script_ease">Learn Adlam Script with Ease</string>
+    <string name="learn_adlam_script_ease_short">Learn Adlam Script</string>
+    <string name="start_adlam_journey_title">Start Your Adlam Journey</string>
+    <string name="start_adlam_journey_description">Master the Adlam script with interactive lessons and practice</string>
+    <string name="get_started">Get Started</string>
+    <string name="learning_modules">Learning Modules</string>
+    <string name="app_logo_description">App Logo</string>
+    <string name="featured_image_desc">Featured content image</string>
+    <string name="menu_icon_desc">Open navigation menu</string>
+    <string name="privacy_policy_url">https://adlamfulfulde-8a54a.web.app/privacy/privacy.html</string>
+    <string name="share_app_text">Check out this amazing Adlam Fulfulde learning app: https://play.google.com/store/apps/details?id=%1s</string>
+    <string name="version">Version %1s</string>
+    <string name="rate_app">Rate this App</string>
     <string name="more_options">More options</string>
     <string name="selected">Selected</string>
+    <string name="adlam_info_desc">Information about the Adlam alphabet</string>
+    <string name="search">Search</string>
+    <string name="search_placeholder">Search for a letter...</string>
+    <string name="quiz_desc">Start a quiz</string>
+    <string name="category_all">All</string>
+    <string name="category_vowels">Vowels</string>
+    <string name="category_consonants">Consonants</string>
+    <string name="category_combined">Combined</string>
+    <string name="no_result_found_for">No letters found for "%1s"</string>
+    <string name="clear_search">Clear search</string>
+    <string name="no_result_icon_desc">No results found icon</string>
+    <string name="contributor_aysha_sow">AYSHA SOW</string>
+    <string name="contributor_aboubacar_ballo">ABOUBAKAR BALLO</string>
+    <string name="contributor_ismaila_hamadou">ISMAILA HAMADOU</string>
+    <string name="link_icon_description">Link icon</string>
     <string name="developed_by">Developed By</string>
+    <string name="developer_name">ISMAIL</string>
     <string name="external_link_icon_description">External link description</string>
+    <string name="app_version">2.0</string>
+    <string name="no_results_vowels">No vowel letters found in this category.</string>
+    <string name="no_results_consonants">No consonant letters found in this category.</string>
+    <string name="no_results_combined">No combined letters found in this category.</string>
+    <string name="no_results_all">No letters found. There might be an issue loading the alphabet.</string>
+    <string name="empty_title_generic">Nothing Here Yet</string>
+    <string name="empty_title_category">%s Category is Empty</string>
+    <string name="try_other_category_suggestion">Try selecting a different category from the tabs above.</string>
     <string name="play_example">Play example</string>
     <string name="writing_lowercase">Writing Lowercase</string>
     <string name="writing_numbers">Writing numbers</string>
-
-
-        <string name="vocabulary_title">Vocabulaire</string>
-        <string name="vocabulary_module_title">Vocabulaire</string>
-        <string name="vocabulary_module_subtitle">Apprenez des mots Adlam courants</string>
-        <string name="vocabulary_empty">La liste de vocabulaire est vide pour le moment.</string>
-        <string name="vocabulary_detail_title">Détail du mot</string>
-        <string name="vocabulary_item_not_found">Mot non trouvé.</string>
-        <string name="play_word_sound_desc">Jouer le son du mot</string>
-        <string name="playing_sound">Lecture...</string>
-        <string name="play_sound_short">Jouer</string>
-        <string name="example_sentence_title">Phrase d\'exemple :</string>
+    <string name="vocabulary_title">Vocabulary</string>
+    <string name="vocabulary_module_title">Vocabulary</string>
+    <string name="vocabulary_module_subtitle">Learn common Adlam words</string>
+    <string name="vocabulary_empty">The vocabulary list is currently empty.</string>
+    <string name="vocabulary_detail_title">Word Detail</string>
+    <string name="vocabulary_item_not_found">Word not found.</string>
+    <string name="play_word_sound_desc">Play the word\'s sound</string>
+    <string name="playing_sound">Playing...</string>
+    <string name="play_sound_short">Play</string>
+    <string name="example_sentence_title">Example sentence:</string>
     <string name="no_audio_available">No audio available</string>
     <string name="go_back">Go back</string>
     <string name="remove_from_favorites">remove_from_favorites</string>
@@ -177,7 +202,6 @@
     <string name="reading_passages_title">reading_passages_title</string>
     <string name="reading_player_title">reading_player_title</string>
     <string name="reading_passage_not_found">reading_passage_not_found</string>
-        <string name="reading_module_title">Lecture Guidée</string>
-        <string name="reading_module_subtitle">Lisez des textes en Adlam</string>
-
+    <string name="reading_module_title">Guided Reading</string>
+    <string name="reading_module_subtitle">Read texts in Adlam</string>
 </resources>
